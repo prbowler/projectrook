@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<link rel="stylesheet" type="text/css" href="/stylesheets/cards.css">
+<head>
+    <% include ../partials/header.ejs %>
+</head>
+
+<body>
+
+<% include ../partials/nav.ejs %>
+
+<div class="container">
+    <h2>Database Results</h2>
+
+    <div>
+        <% result.forEach(function(r) {
+            let suit = 'black';
+            let number = 'R';
+            if (r.suit == 1) { suit = "red";}
+            if (r.suit == 2) { suit = "yellow";}
+            if (r.suit == 4) { suit = "green";}
+            if (r.number !== 0) { number = r.number;} %>
+        <div class="card">
+                <span class="top_number <%= suit %>">
+                    <%= number %>
+                </span>
+            <div class="inner_card <%= suit %>">
+                    <span class="middle_number <%= suit %>">
+                        <%= number %>
+                    </span>
+            </div>
+            <span class="bottom_number <%= suit %>">
+                    <%= number %>
+                </span>
+        </div>
+        <% }); %>
+    </div>
+</div>
+
+</body>
+</html>

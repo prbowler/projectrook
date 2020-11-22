@@ -1,0 +1,127 @@
+header {
+    height:150px;
+}
+
+#logo {
+    display: inline-flex;
+}
+
+#banner {
+    border:solid;
+    height: 100px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    flex:100%;
+    background-color:rgba(41.2, 14.5, 13.3, .50);
+    border-radius:20px;
+    border-color:rgba(88.2, 78.8, 68.6, .50);
+}
+
+h1 {
+    display: inline-block;
+    text-align: center;
+    margin-left: 10vw;
+    color: white;
+    font-style: oblique;
+    font-size: 35px;
+}
+
+h2 {
+    text-align: center;
+    font-size: 24px;
+}
+
+h3 {
+    font-size: 20px;
+}
+
+#hand {
+    display:block;
+    border:solid;
+    height:400px;
+}
+
+.card {
+    display:inline-block;
+    border:solid;
+    width:100px;
+    height:150px;
+    border-radius:10px;
+    margin-left:10px;
+
+}
+
+.inner_card {
+    display:block;
+    border:solid;
+    width:50px;
+    height:50px;
+    margin-top:25px;
+    margin-left:20px;
+}
+
+.top_number {
+    display:inline-block;
+    margin-top:2px;
+    margin-left:8px;
+}
+
+.card_check {
+    margin-left:50px;
+}
+
+.middle_number {
+    font-size:40px;
+}
+
+.bottom_number {
+    display:inline-block;
+    margin-left:80px;
+    margin-top:30px;
+}
+
+.red {
+    color:red;
+}
+
+.green {
+    color: green;
+}
+
+.yellow {
+    color:yellow;
+}
+
+.black {
+    color:black;
+}
+
+#output {
+    width:90%;
+    border:solid;
+    border-radius:20px;
+    padding:10px;
+    margin-top:10px;
+}
+
+button {
+    border-radius:10px;
+}
+
+@media screen and (max-width: 800px) {
+
+    #buttons {
+        position: absolute;
+        bottom: 10px;
+        left: 10px;
+    }
+
+    h1 {
+        display: inline-block;
+        text-align: center;
+        margin-left: 10vw;
+        color: white;
+        font-style: oblique;
+        font-size: 4vw;
+    }
+}
