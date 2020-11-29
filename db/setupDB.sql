@@ -25,14 +25,11 @@ VALUES (1, 1, 15), (1, 14, 10), (1, 13, 0), (1, 12, 0), (1, 11, 0), (1, 10, 10),
        (4, 1, 15), (4, 14, 10), (4, 13, 0), (4, 12, 0), (4, 11, 0), (4, 10, 10), (4, 9, 0), (4, 8, 0), (4, 7, 0), (4, 6, 0), (4, 5, 5),
        (5, 0, 20);
 
-
-
 CREATE TABLE player (
-    id SERIAL PRIMARY KEY,
-    username VARCHAR(50) NOT NULL,
-    firstName VARCHAR(50),
-    lastName VARCHAR(50),
-    email VARCHAR(50),
+    username VARCHAR(250) NOT NULL PRIMARY KEY,
+    firstName VARCHAR(250),
+    lastName VARCHAR(250),
+    email VARCHAR(250),
     password VARCHAR(255)
 );
 
@@ -50,7 +47,7 @@ CREATE TABLE team (
     name VARCHAR(250)
 );
 INSERT INTO team (name)
-VALUES ('prbowler1'), ('prbowler2');
+VALUES ('prbowler'), ('bobo'), ('momo'), ('test') ;
 
 CREATE TABLE player_team (
     playerID INT references player(id),
@@ -59,18 +56,18 @@ CREATE TABLE player_team (
 INSERT INTO player_team (playerID, teamID) VALUES (1,1), (2,2), (3,1), (4,2);
 
 CREATE TABLE game (
-    id SERIAL PRIMARY KEY,
-    name VARCHAR(250) NOT NULL,
-    team1 INT references team(id),
-    team2 INT references team(id),
-    score1 INT,
-    score2 INT,
-    trump INT references suit(id),
-    winner INT references team(id)
-);
+    name VARCHAR(250) NOT NULL PRIMARY KEY,
+    player1 VARCHAR(250) references player(username),
+    player2 VARCHAR(250) references player(username),
+    player3 VARCHAR(250) references player(username),
+    player4 VARCHAR(250) references player(username),
+    score1 INT DEFAULT 0,
+    score2 INT DEFAULT 0,
+    trump INT references suit(id) DEFAULT 5,
+    round INT DEFAULT 1,
+    hand INT DEFAULT 1
 
-INSERT INTO game (name, team1, team2)
-VALUES ('BowlerGame', 1, 2);
+);
 
 CREATE TABLE round (
     id SERIAL PRIMARY KEY,
@@ -88,12 +85,13 @@ CREATE TABLE round_points (
 
 CREATE TABLE hand (
     id SERIAL PRIMARY KEY,
-    roundID INT references round(id),
-    playerID INT references player(id)
+    gameName VARCHAR(250) references game(name),
+    username VARCHAR(250) references player(username),
+    cards INT[]
 );
 
 INSERT INTO hand (roundID, playerID)
-VALUES (1, 1), (1, 2), (1, 3), (1, 4);
+VALUES (1, 16), (1, 17), (1, 18), (1, 20);
 
 INSERT INTO hand (roundID, playerID)
 VALUES (1, 5);
@@ -136,3 +134,5 @@ CREATE TABLE bid_win (
 
 SELECT c.id, c.suit, c.number, c.value FROM card as c, hand_cards AS hc WHERE hc.cardID = c.id AND hc.handID = 1;
 DELETE FROM hand_cards WHERE roundID = 1;
+
+select c.id, c.suit, c.value from card as c, hand as h where c.id = ANY(h.cards) and h.id = 9;
