@@ -4,6 +4,7 @@ const gameModel = require("../models/gameModel.js");
 function getGames(req, res) {
     gameModel.getGamesFromDB(function(error, result) {
         //res.json(result);
+        console.log("result: ", result);
         res.render('pages/gameList', {result: result});
     });
 }

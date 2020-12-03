@@ -27,16 +27,17 @@ function addPlayer(req, res) {
 
 function validatePlayer(req, res) {
     console.log('validatePlayer');
-    let username = req.query.username;
+    //let result = {success: false};
+    let username = req.body.username;
     console.log('username', username);
-    let password = req.query.password;
+    let password = req.body.password;
     console.log('password ', password);
     let values = [username];
     playerModel.getPlayerFromDB(values, function(error, results) {
         bcrypt.compare(password, results.rows[0].password, function (err, result) {
             if (result) {
-                //res.session.Auth = results.rows[0].player;
-                res.json(results.rows);
+                req.session.user = req.body.username;
+                res.redirect('/games');
             } else {
                 res.render('pages/login', { title: 'Login' });
             }
