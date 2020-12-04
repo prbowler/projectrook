@@ -38,7 +38,8 @@ function validatePlayer(req, res) {
             if (result) {
                 req.session.user = req.body.username;
                 console.log("user login: ", result);
-                res.redirect('/games');
+                //res.redirect('/games');
+                res.render('pages/newGame', { title: 'Create Game' });
             } else {
                 res.render('pages/login', { title: 'Login' });
             }

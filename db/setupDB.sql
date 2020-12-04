@@ -1,8 +1,13 @@
 CREATE USER rookplayer WITH PASSWORD 'rookplayer';
+CREATE DATABASE rook OWNER rookplayer;
+
+/* Do not need these if rookplayer is owner */
 GRANT SELECT, INSERT, UPDATE ON suit, card TO rookplayer;
 GRANT SELECT, INSERT, UPDATE ON bid, bid_win, game, hand, hand_cards, player, player_team, round, round_points, team, trick, trick_cards  TO rookplayer;
 GRANT SELECT, USAGE, UPDATE ON suit_id_seq, card_id_seq, bid_id_seq, bid_win_id_seq, game_id_seq, hand_id_seq, hand_cards_id_seq, player_id_seq, round_id_seq, team_id_seq, trick_id_seq TO rookplayer;
 GRANT DELETE ON bid, bid_win, game, hand, hand_cards, player, player_team, round, round_points, team, trick, trick_cards  TO rookplayer;
+
+
 CREATE TABLE suit (
     id SERIAL PRIMARY KEY,
     name VARCHAR(250),
@@ -33,19 +38,24 @@ CREATE TABLE player (
     password VARCHAR(255)
 );
 
+/* Need encrypted password
 INSERT INTO player (username, firstName, lastName, email, password)
 VALUES ('prbowler1', 'Philip', 'Bowler', 'prbowler1@gamil.com','prbowler1'),
        ('prbowler2', 'Philip', 'Bowler', 'prbowler1@gamil.com','prbowler2'),
        ('prbowler3', 'Philip', 'Bowler', 'prbowler1@gamil.com','prbowler3'),
        ('prbowler4', 'Philip', 'Bowler', 'prbowler1@gamil.com','prbowler4');
 
+
 INSERT INTO player (username, firstName, lastName, email, password)
 VALUES ('widow', 'Widow', 'Widow', 'widow','widow');
+*/
 
+/* May not be needed
 CREATE TABLE team (
     id SERIAL PRIMARY KEY,
     name VARCHAR(250)
 );
+
 INSERT INTO team (name)
 VALUES ('prbowler'), ('bobo'), ('momo'), ('test') ;
 
@@ -53,7 +63,9 @@ CREATE TABLE player_team (
     playerID INT references player(id),
     teamID INT references team(id)
 );
+
 INSERT INTO player_team (playerID, teamID) VALUES (1,1), (2,2), (3,1), (4,2);
+*/
 
 CREATE TABLE game (
     name VARCHAR(250) NOT NULL PRIMARY KEY,
@@ -71,7 +83,7 @@ CREATE TABLE game (
 
 CREATE TABLE round (
     id SERIAL PRIMARY KEY,
-    gameID INT references game(id)
+    gameID VARCHAR(255) references game(name)
 );
 
 INSERT INTO round (gameID)
@@ -90,12 +102,7 @@ CREATE TABLE hand (
     cards INT[]
 );
 
-INSERT INTO hand (roundID, playerID)
-VALUES (1, 16), (1, 17), (1, 18), (1, 20);
-
-INSERT INTO hand (roundID, playerID)
-VALUES (1, 5);
-
+/* May not need
 CREATE TABLE hand_cards (
     id SERIAL PRIMARY KEY,
     handID INT references hand(id),
@@ -104,10 +111,9 @@ CREATE TABLE hand_cards (
     played BOOLEAN DEFAULT false
 );
 
-
-
 INSERT INTO hand_cards (handID, cardID, roundID)
 VALUES (handID, cardID, roundID);
+*/
 
 CREATE TABLE trick (
     id SERIAL PRIMARY KEY,

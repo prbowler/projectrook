@@ -9,9 +9,9 @@
         <form action="/games/join" method="get">
             <h2>All Games</h2>
             <select name="game">
-                <%result.forEach(function(r) { %>
+                <% if (result) { result.forEach(function(r) { %>
                 <option value="<%= r.name%>"><%=r.name%></option>
-                <%});%>
+                <%});}%>
             </select>
             <input type="submit">
         </form>
