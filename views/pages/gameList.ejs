@@ -7,6 +7,7 @@
 <div>
     <div>
         <form action="/games/join" method="get">
+            <h2>All Games</h2>
             <select name="game">
                 <%result.forEach(function(r) { %>
                 <option value="<%= r.name%>"><%=r.name%></option>

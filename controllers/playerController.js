@@ -37,6 +37,7 @@ function validatePlayer(req, res) {
         bcrypt.compare(password, results.rows[0].password, function (err, result) {
             if (result) {
                 req.session.user = req.body.username;
+                console.log("user login: ", result);
                 res.redirect('/games');
             } else {
                 res.render('pages/login', { title: 'Login' });

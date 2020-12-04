@@ -2,6 +2,7 @@ const db = require('./db.js');
 
 function getGamesFromDB(callback) {
     console.log("getGamesFromDB");
+    let player =
     const sql = "SELECT * FROM game";
     db.sel(sql, callback);
 }

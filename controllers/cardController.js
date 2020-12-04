@@ -59,8 +59,8 @@ function getHand(req, res, next) {
         let id = result.rows[0].id;
         values = [id, cards];
         cardModel.getHandFromDB(values, function(error, result) {
-            res.render('pages/hand', {result: result.rows});
-            //res.json(result.rows);
+            //res.render('pages/hand', {result: result.rows});
+            res.json(result.rows);
         });
     });
 
