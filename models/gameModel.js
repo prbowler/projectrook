@@ -25,9 +25,23 @@ function addGameToDB(values, callback) {
     db.add(sql, values, callback);
 }
 
+function getBid(values, callback) {
+    console.log("getBid");
+    const sql = "SELECT bid, bidwinner FROM game WHERE name = $1";
+    db.selByValues(sql, values, callback);
+}
+
+function updateBid(values, callback) {
+    console.log("updateBid");
+    const sql = "UPDATE game SET bid = $1, bidwinner = $2 WHERE name = $3";
+    db.add(sql, values, callback);
+}
+
 module.exports = {
     getGamesFromDB: getGamesFromDB,
     getGameFromDB: getGameFromDB,
     deleteGame: deleteGame,
-    addGameToDB: addGameToDB
+    addGameToDB: addGameToDB,
+    getBid: getBid,
+    updateBid: updateBid
 };

@@ -38,8 +38,8 @@ function validatePlayer(req, res) {
             if (result) {
                 req.session.user = req.body.username;
                 console.log("user login: ", result);
-                //res.redirect('/games');
-                res.render('pages/newGame', { title: 'Create Game' });
+                res.redirect('/games');
+                //res.render('pages/gameLounge', { title: 'Game Lounge' });
             } else {
                 res.render('pages/login', { title: 'Login' });
             }
@@ -51,8 +51,28 @@ function validatePlayer(req, res) {
     //});
 }
 
+function checkForUser(req, res, next) {
+    console.log("check for user");
+    if (!req.session.user) {
+        res.render('pages/login', { title: 'Login' });
+    } else {
+        console.log("user is logged in as: ", req.session.user);
+    }
+    next();
+}
+
+function logout(req, res, next) {
+    console.log("logout");
+    if (req.session.user) {
+        req.session.destroy();
+    }
+    res.render('pages/login', { title: 'Login' });
+}
+
 module.exports = {
     getPlayers: getPlayers,
     addPlayer: addPlayer,
-    validatePlayer: validatePlayer
+    validatePlayer: validatePlayer,
+    checkForUser: checkForUser,
+    logout: logout
 };

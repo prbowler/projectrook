@@ -5,7 +5,7 @@ CREATE DATABASE rook OWNER rookplayer;
 GRANT SELECT, INSERT, UPDATE ON suit, card TO rookplayer;
 GRANT SELECT, INSERT, UPDATE ON bid, bid_win, game, hand, hand_cards, player, player_team, round, round_points, team, trick, trick_cards  TO rookplayer;
 GRANT SELECT, USAGE, UPDATE ON suit_id_seq, card_id_seq, bid_id_seq, bid_win_id_seq, game_id_seq, hand_id_seq, hand_cards_id_seq, player_id_seq, round_id_seq, team_id_seq, trick_id_seq TO rookplayer;
-GRANT DELETE ON bid, bid_win, game, hand, hand_cards, player, player_team, round, round_points, team, trick, trick_cards  TO rookplayer;
+GRANT DELETE ON game, hand, player TO rookplayer;
 
 
 CREATE TABLE suit (
@@ -142,3 +142,7 @@ SELECT c.id, c.suit, c.number, c.value FROM card as c, hand_cards AS hc WHERE hc
 DELETE FROM hand_cards WHERE roundID = 1;
 
 select c.id, c.suit, c.value from card as c, hand as h where c.id = ANY(h.cards) and h.id = 9;
+
+ALTER TABLE game ADD COLUMN bid INT DEFAULT 0;
+ALTER TABLE game ADD COLUMN bidwinner VARCHAR(255) REFERENCES player(username);
+

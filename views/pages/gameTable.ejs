@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<link rel="stylesheet" type="text/css" href="/stylesheets/game.css">
+<link rel="stylesheet" type="text/css" href="/stylesheets/cards.css">
+
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="../js/game.js"></script>
+    <% include ../partials/banner.ejs %>
+</head>
+<body>
+<div id="game-info">
+    <% game.forEach(function(r) { %>
+    <span id="game-name">Game Name <%= r.name; %></span>
+    <span id="players">Players: <%= r.player1 + " " + r.player2 + " " + r.player3 + " " + r.player4 %></span>
+    <span id="score">Score Team1: <%=r.score1%> ScoreTeam1: <%=r.score2%></span>
+        <% }); %>
+        <div id="status"></div>
+</div>
+<div id="game-menu">
+    <button id="deal" onclick="deal();">Deal</button>
+</div>
+<div id="cards">
+
+</div>
+
+<% include ../partials/footer.ejs %>
+</body>
+</html>

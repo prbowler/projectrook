@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <% include ../partials/banner.ejs %>
 </head>
 <body>
 <div>
@@ -9,7 +8,8 @@
         <form action="/games/join" method="get">
             <h2>All Games</h2>
             <select name="game">
-                <% if (result) { result.forEach(function(r) { %>
+                <%if (games.length > 0) {
+                    games.forEach(function(r) { %>
                 <option value="<%= r.name%>"><%=r.name%></option>
                 <%});}%>
             </select>
@@ -17,6 +17,5 @@
         </form>
     </div>
 </div>
-<% include ../partials/footer.ejs %>
 </body>
 </html>

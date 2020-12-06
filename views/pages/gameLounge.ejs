@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <% include ../partials/banner.ejs %>
+</head>
+
+<body>
+    <% include ../partials/gameList.ejs %>
+<div>
+    <form id="newGame" action="/games/newGame" method="get">
+        <input type="submit" value="New Game">
+    </form>
+</div>
+<% include ../partials/footer.ejs %>
+</body>
+</html>

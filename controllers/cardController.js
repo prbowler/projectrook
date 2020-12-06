@@ -1,7 +1,11 @@
 const cardModel = require("../models/cardModel.js");
+let session = require('express-session');
 
 function getCards(req, res, next) {
     console.log('Deal');
+    console.log("req.session.game", req.session.game[0].name);
+    let gamename = req.session.game[0].name;
+    console.log("session game name: ", gamename);
     cardModel.getCardsFromDB(function(error, result) {
         console.log("Cards: ", result);
         shuffleCards(result);
@@ -18,55 +22,50 @@ function getCards(req, res, next) {
             h4.push(result[i + 30].id);
             if (i < 5) { h5.push(result[i + 40].id); }
         }
-        let gamename = 'test';
-        let username = 'prbowler';
+
+        let username = req.session.game[0].player1;
         let cards = h1;
         let values = [gamename, username, cards];
         cardModel.dealCardsToDB(values);
-        gamename = 'test';
-        username = 'bobo';
+        username = req.session.game[0].player2;
         cards = h2;
         values = [gamename, username, cards];
         cardModel.dealCardsToDB(values);
-        gamename = 'test';
-        username = 'momo';
+        username = req.session.game[0].player3;
         cards = h3;
         values = [gamename, username, cards];
         cardModel.dealCardsToDB(values);
-        gamename = 'test';
-        username = 'test';
+        username = req.session.game[0].player4;
         cards = h4;
         values = [gamename, username, cards];
         cardModel.dealCardsToDB(values);
-        gamename = 'test';
         username = 'widow';
         cards = h5;
         values = [gamename, username, cards];
         cardModel.dealCardsToDB(values);
-        getHand(req, res, next);
-        //res.json(result);
+        console.log("deal result: ", result);
+        res.json(result);
     });
 }
 
 //get one hand
 function getHand(req, res, next) {
     console.log('getHand');
-    let gamename = 'test';
-    let username = 'prbowler';
+    console.log("game", req.session.game);
+    let game = req.session.game;
+    console.log("user: ", req.session.user);
+    let username = req.session.user;
+    let gamename = req.session.game[0].name;
     let values = [gamename, username];
     cardModel.getHandInfo(values, function(error, result) {
         let cards = result.rows[0].cards;
         let id = result.rows[0].id;
         values = [id, cards];
         cardModel.getHandFromDB(values, function(error, result) {
-            //res.render('pages/hand', {result: result.rows});
+            //res.render('pages/game', {game: game, cards: result.rows});
             res.json(result.rows);
         });
     });
-
-    //cardModel.getHandFromDB(values, function(error, result) {
-     //   res.render('pages/hand', {result: result});
-    //});
 }
 
 // Shuffle the cards into a random sequence and return the deck

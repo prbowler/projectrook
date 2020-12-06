@@ -16,7 +16,7 @@ app.use(require('morgan')('dev'));
 //session info
 app.use(session({
     name: 'server-session-cookie-id',
-    secret: 'my express secret',
+    secret: 'rook is fun',
     saveUninitialized: true,
     resave: true,
     store: new FileStore()

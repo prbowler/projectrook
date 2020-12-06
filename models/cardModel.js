@@ -13,15 +13,15 @@ function getHandFromDB(values, callback) {
 }
 
 function getHandInfo(values, callback) {
-    console.log("getHnadInfo");
+    console.log("getHandInfo");
     const sql = "SELECT * FROM hand WHERE gamename = $1 AND username = $2";
     db.selByValues(sql, values, callback);
 }
 
-function deleteHandCards(roundID) {
-    console.log("deleteHandCards", roundID);
-    const sql = "DELETE FROM hand_cards WHERE roundid = 1";
-    db.del(sql);
+function deleteHandCards(values) {
+    console.log("deleteHandCards", values);
+    const sql = "DELETE FROM hand WHERE gamename = $1";
+    db.del(sql, values);
 }
 
 function dealCardsToDB(values) {

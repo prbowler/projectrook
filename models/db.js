@@ -28,13 +28,15 @@ function selByValues(sql, values, callback) {
     });
 }
 
-function del(sql) {
+function del(sql, values, callback) {
     console.log("delete ", sql);
-    pool.query(sql, (err, res) => {
+    pool.query(sql, values, (err, result) => {
         if (err) {
             console.log("DataBase error");
             console.log(err);
         }
+        console.log("Results: " + JSON.stringify(result));
+        callback(null, result);
     });
 }
 
