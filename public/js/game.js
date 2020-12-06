@@ -26,6 +26,16 @@ function showHand() {
 function hideBid() {
     $("#bidAmount").hide();
     $("#bid").hide();
+    $("#pass").hide();
+    $(".card").click(function() {
+        $(this).hide();
+        let suit = this.children[0].className.slice(11);
+        let params = {
+            number: this.children[0].innerHTML,
+            suit: suit
+        };
+        playCard(params);
+    });
 }
 
 function bid() {
@@ -33,7 +43,14 @@ function bid() {
     let bidAmount = $("#bidAmount").val();
     let params = {bidAmount: bidAmount};
     $.post("/games/bid", params, function(result) {
-       $("#status").text(JSON.stringify(result.rows));
+       $("#status").text(JSON.stringify(result));
+    });
+}
+
+function playCard(params) {
+    console.log("play card client", params);
+    $.post("/games/playCard", params, function(result) {
+        $("#status").text(JSON.stringify(result));
     });
 }
 
