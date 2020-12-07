@@ -79,33 +79,11 @@ function bid(req, res) {
     });
 }
 
-function playCard(req, res) {
-    console.log("playcard ", req.body);
-    let number = req.body.number;
-    let suitName = req.body.suit;
-    let suit = 5;
-    //'red', 'red'), ('yellow', 'yellow'), ('black', 'black'), ('green', 'green'), ('rook', 'none'
-    if (suitName === 'red') {suit = 1;}
-    if (suitName === 'yellow') {suit = 2;}
-    if (suitName === 'black') {suit = 3;}
-    if (suitName === 'green') {suit = 4;}
-    let values = [suit, number];
-
-    let result = {
-        success:true,
-        number: number,
-        suitName: suitName,
-        suit: suit
-    };
-    res.json(result);
-}
-
 module.exports = {
     getGames: getGames,
     getGame: getGame,
     newGame: newGame,
     showGames: showGames,
     joinGame: joinGame,
-    bid: bid,
-    playCard: playCard
+    bid: bid
 };

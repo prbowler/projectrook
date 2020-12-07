@@ -37,11 +37,25 @@ function updateBid(values, callback) {
     db.add(sql, values, callback);
 }
 
+function addTrick(values, callback) {
+    console.log("addTrick");
+    const sql = "INSERT INTO trick (gameName, roundID, trickNumber) VALUES ($1, $2, $3)";
+    db.add(sql, values, callback);
+}
+
+function updateTrick(values, callback) {
+    console.log("updateBid");
+    const sql = "UPDATE trick SET winnerID = $1, points = $2 WHERE gameName = $3 AND roundID = $4 AND tickNumber = $5";
+    db.add(sql, values, callback);
+}
+
 module.exports = {
     getGamesFromDB: getGamesFromDB,
     getGameFromDB: getGameFromDB,
     deleteGame: deleteGame,
     addGameToDB: addGameToDB,
     getBid: getBid,
-    updateBid: updateBid
+    updateBid: updateBid,
+    addTrick: addTrick,
+    updateTrick: updateTrick
 };

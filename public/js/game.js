@@ -11,7 +11,7 @@ function deal() {
 function showHand() {
     $.post("/cards/showHand", function(result) {
         let bid = "<input id='bidAmount' type=\"number\" name=\"bidAmount\" step=\"5\"><button id=\"bid\" onclick=\"bid()\">Bid</button>";
-        let pass = "<button id=\"pass\" onclick=\"hideBid()\">Pass</button>"
+        let pass = "<button id=\"pass\" onclick=\"hideBid()\">Pass</button>";
         console.log("game.js result showHand", result);
         $("#show-hand").hide();
         $("#game-menu").append(bid);
@@ -24,9 +24,11 @@ function showHand() {
 }
 
 function hideBid() {
+    let newTrick = "<button id=\"newTrick\" onclick=\"newTrick()\">New Trick</button>";
     $("#bidAmount").hide();
     $("#bid").hide();
     $("#pass").hide();
+    $("#game-menu").append(newTrick);
     $(".card").click(function() {
         $(this).hide();
         let suit = this.children[0].className.slice(11);
@@ -49,9 +51,26 @@ function bid() {
 
 function playCard(params) {
     console.log("play card client", params);
-    $.post("/games/playCard", params, function(result) {
+    $.post("/cards/playCard", params, function(result) {
         $("#status").text(JSON.stringify(result));
     });
+    showTrick({trickID: 1});
+}
+
+function showTrick(params) {
+    console.log("show trick cards");
+    $.post("/cards/showTrickCards", params, function(result) {
+        $("#status").text(JSON.stringify(result));
+        $("#played_cards").empty();
+        result.forEach(function(r) {
+            let renderedCard = renderCard(r);
+            $("#played_cards").append(renderedCard);
+        });
+    });
+}
+
+function newTrick() {
+    console.log("new trick");
 }
 
 function renderCard(card) {

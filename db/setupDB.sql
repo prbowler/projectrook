@@ -77,8 +77,9 @@ CREATE TABLE game (
     score2 INT DEFAULT 0,
     trump INT references suit(id) DEFAULT 5,
     round INT DEFAULT 1,
-    hand INT DEFAULT 1
-
+    hand INT DEFAULT 1,
+    bid INT DEFAULT 0,
+    bidwinner VARCHAR(255) REFERENCES player(username)
 );
 
 CREATE TABLE round (
@@ -117,14 +118,19 @@ VALUES (handID, cardID, roundID);
 
 CREATE TABLE trick (
     id SERIAL PRIMARY KEY,
-    roundID INT references round(id),
-    winnerID INT references player(id),
-    points INT NOT NULL
+    gameName VARCHAR(250) REFERENCES game(name) NOT NULL,
+    roundID INT NOT NULL,
+    trickNumber INT NOT NULL,
+    winnerID VARCHAR(250) references player(username),
+    points INT
 );
+
 CREATE TABLE trick_cards (
     trickID INT references trick(id),
-    cardID INT references card(id)
+    cardID INT references card(id),
+    playerName VARCHAR(250) REFERENCES player(username)
 );
+
 CREATE TABLE bid (
     id SERIAL PRIMARY KEY,
     playerID INT references player(id),

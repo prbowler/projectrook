@@ -68,6 +68,39 @@ function getHand(req, res, next) {
     });
 }
 
+function playCard(req, res) {
+    console.log("playcard ", req.body);
+    let number = req.body.number;
+    let suitName = req.body.suit;
+    let suit = 5;
+    if (suitName === 'red') {suit = 1;}
+    if (suitName === 'yellow') {suit = 2;}
+    if (suitName === 'black') {suit = 3;}
+    if (suitName === 'green') {suit = 4;}
+    let values = [suit, number];
+    cardModel.getCardID(values, function(error, result) {
+        console.log("cardid ", result.rows[0].id);
+        let value = [1, result.rows[0].id, req.session.user];
+        cardModel.addTrickCard(value);
+    });
+
+    let result = {
+        success:true,
+        number: number,
+        suitName: suitName,
+        suit: suit
+    };
+    res.json(result);
+}
+
+function showTrickCards(req, res) {
+    console.log("show trick cards");
+    let values = [req.body.trickID];
+    cardModel.showTrickCards(values, function(error, result) {
+        res.json(result.rows);
+    });
+}
+
 // Shuffle the cards into a random sequence and return the deck
 function shuffleCards(deck) {
     let i, j, k;
@@ -85,5 +118,7 @@ function shuffleCards(deck) {
 module.exports = {
     getCards: getCards,
     getHand: getHand,
+    playCard: playCard,
+    showTrickCards: showTrickCards,
     shuffleCards: shuffleCards
 };

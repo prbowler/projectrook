@@ -6,6 +6,12 @@ function getCardsFromDB(callback) {
     db.sel(sql, callback);
 }
 
+function getCardID(values, callback) {
+    console.log("getCardsFromDB");
+    const sql = "SELECT id FROM card WHERE suit = $1 AND number = $2";
+    db.selByValues(sql, values, callback);
+}
+
 function getHandFromDB(values, callback) {
     console.log("getHandFromDB");
     const sql = "SELECT c.id, c.suit, c.number, c.value FROM card as c, hand AS h WHERE h.id = $1 AND c.id = ANY($2)";
@@ -30,10 +36,25 @@ function dealCardsToDB(values) {
     db.add(sql, values);
 }
 
+function addTrickCard(values) {
+    console.log("addTrickCard");
+    const sql = "INSERT INTO trick_cards (trickID, cardID, playerName) VALUES ($1, $2, $3)";
+    db.add(sql, values);
+}
+
+function showTrickCards(values, callback) {
+    console.log("show trick cards");
+    const sql = "SELECT c.id, c.suit, c.number FROM card AS c, trick_cards as t WHERE t.trickid = $1 AND c.id = t.cardID";
+    db.selByValues(sql, values, callback);
+}
+
 module.exports = {
     getCardsFromDB: getCardsFromDB,
+    getCardID: getCardID,
     getHandFromDB: getHandFromDB,
     getHandInfo: getHandInfo,
     deleteHandCards: deleteHandCards,
-    dealCardsToDB: dealCardsToDB
+    dealCardsToDB: dealCardsToDB,
+    addTrickCard: addTrickCard,
+    showTrickCards: showTrickCards
 };
