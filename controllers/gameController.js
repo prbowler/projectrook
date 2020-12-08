@@ -2,6 +2,10 @@ const gameModel = require("../models/gameModel.js");
 let session = require('express-session');
 const cardController = require("./cardController.js");
 
+function returnToGame(req, res) {
+    console.log("return to the game");
+}
+
 function getGames(req, res) {
     gameModel.getGamesFromDB(function(error, result) {
         //res.json(result);
@@ -78,6 +82,8 @@ function bid(req, res) {
         res.json(result);
     });
 }
+
+
 
 module.exports = {
     getGames: getGames,

@@ -42,6 +42,12 @@ function addTrickCard(values) {
     db.add(sql, values);
 }
 
+function addTrick(values, callback) {
+    console.log("addTrick");
+    const sql = "INSERT INTO trick (gameName, roundID, trickNumber) VALUES ($1, $2, $3)";
+    db.add(sql, values, callback);
+}
+
 function showTrickCards(values, callback) {
     console.log("show trick cards");
     const sql = "SELECT c.id, c.suit, c.number FROM card AS c, trick_cards as t WHERE t.trickid = $1 AND c.id = t.cardID";
@@ -56,5 +62,6 @@ module.exports = {
     deleteHandCards: deleteHandCards,
     dealCardsToDB: dealCardsToDB,
     addTrickCard: addTrickCard,
+    addTrick: addTrick,
     showTrickCards: showTrickCards
 };

@@ -11,5 +11,6 @@ router.post('/', cardController.getCards);
 router.post('/showHand', playerController.checkForUser, cardController.getHand);
 router.post("/playCard", cardController.playCard);
 router.post("/showTrickCards", cardController.showTrickCards);
+router.post('/newTrick', cardController.newTrick);
 
 module.exports = router;

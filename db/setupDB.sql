@@ -133,10 +133,16 @@ CREATE TABLE trick_cards (
 
 CREATE TABLE bid (
     id SERIAL PRIMARY KEY,
-    playerID INT references player(id),
-    roundID INT references round(id),
-    amount INT
+    game VARCHAR(250) references game(name),
+    round INT,
+    passP1 BOOLEAN DEFAULT FALSE,
+    passP2 BOOLEAN DEFAULT FALSE,
+    passP3 BOOLEAN DEFAULT FALSE,
+    passP4 BOOLEAN DEFAULT FALSE,
+    amount INT DEFAULT 0,
+    bidWinner VARCHAR(250) references player(username)
 );
+
 CREATE TABLE bid_win (
     id SERIAL PRIMARY KEY,
     bidID INT references bid(id),

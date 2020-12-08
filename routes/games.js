@@ -17,7 +17,7 @@ router.get('/show', gameController.showGames);
 router.get('/create', gameController.newGame);
 router.get('/join', gameController.joinGame);
 router.post('/bid', gameController.bid);
-//router.post('/playCard', gameController.playCard);
+
 
 
 module.exports = router;

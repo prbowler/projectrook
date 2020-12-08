@@ -37,11 +37,7 @@ function updateBid(values, callback) {
     db.add(sql, values, callback);
 }
 
-function addTrick(values, callback) {
-    console.log("addTrick");
-    const sql = "INSERT INTO trick (gameName, roundID, trickNumber) VALUES ($1, $2, $3)";
-    db.add(sql, values, callback);
-}
+
 
 function updateTrick(values, callback) {
     console.log("updateBid");
@@ -56,6 +52,5 @@ module.exports = {
     addGameToDB: addGameToDB,
     getBid: getBid,
     updateBid: updateBid,
-    addTrick: addTrick,
     updateTrick: updateTrick
 };

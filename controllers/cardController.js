@@ -101,6 +101,17 @@ function showTrickCards(req, res) {
     });
 }
 
+function newTrick(req,res) {
+    console.log("newTrick");
+    let gameName = "test";
+    let round = 1;
+    let trickNumber = 2;
+    let values = [gameName, round, trickNumber];
+    cardModel.addTrick(values, function(error, result) {
+        getCards(req,res);
+    });
+}
+
 // Shuffle the cards into a random sequence and return the deck
 function shuffleCards(deck) {
     let i, j, k;
@@ -120,5 +131,6 @@ module.exports = {
     getHand: getHand,
     playCard: playCard,
     showTrickCards: showTrickCards,
+    newTrick: newTrick,
     shuffleCards: shuffleCards
 };

@@ -1,3 +1,5 @@
+
+
 function deal() {
     $.post("/cards", function(result) {
         let showHand = "<button id=\"show-hand\" onclick=\"showHand();\">Show Hand</button>";
@@ -71,6 +73,19 @@ function showTrick(params) {
 
 function newTrick() {
     console.log("new trick");
+    let gameName = "test";
+    let round = 1;
+    let trickNumber = 2;
+    let params = {
+        gameName: gameName,
+        round: round,
+        trickNumber: trickNumber
+    }
+    $.post("/card/newTrick", params, function(result) {
+        $("#bidAmount").show();
+        $("#bid").show();
+        $("#pass").show();
+    });
 }
 
 function renderCard(card) {
