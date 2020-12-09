@@ -4,6 +4,7 @@ const saltRounds = 10;
 let session = require('express-session');
 let FileStore = require('session-file-store')(session);
 
+
 function getPlayers(req, res) {
     playerModel.getPlayersFromDB(1, function(error, results) {
         res.json(results);
@@ -68,6 +69,8 @@ function logout(req, res, next) {
     }
     res.render('pages/login', { title: 'Login' });
 }
+
+
 
 module.exports = {
     getPlayers: getPlayers,

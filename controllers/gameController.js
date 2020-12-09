@@ -1,6 +1,7 @@
 const gameModel = require("../models/gameModel.js");
 let session = require('express-session');
 const cardController = require("./cardController.js");
+let client = null;
 
 function returnToGame(req, res) {
     console.log("return to the game");
@@ -78,11 +79,34 @@ function bid(req, res) {
                 bidwinner: result.rows[0].bidwinner
             };
         }
-
         res.json(result);
     });
 }
 
+function subscribe(req, res, next) {
+    // send headers to keep connection alive
+    const headers = {
+        'Content-Type': 'text/event-stream',
+        'Connection': 'keep-alive',
+        'Cache-Control': 'no-cache'
+    };
+    res.writeHead(200, headers);
+
+    // send client a simple response
+    res.write('you are subscribed');
+
+    // store `res` of client to let us send events at will
+    client = res;
+
+    // listen for client 'close' requests
+    req.on('close', () => { client = null; });
+    next();
+}
+
+function sendRefresh(req, res, next) {
+    client.write('data: refresh');
+    next();
+}
 
 
 module.exports = {
@@ -91,5 +115,7 @@ module.exports = {
     newGame: newGame,
     showGames: showGames,
     joinGame: joinGame,
-    bid: bid
+    bid: bid,
+    subscribe: subscribe,
+    sendRefresh: sendRefresh
 };

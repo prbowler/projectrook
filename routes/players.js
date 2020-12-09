@@ -17,4 +17,9 @@ router.get('/login', function(req, res, next) {
 });
 router.get('/logout', playerController.logout);
 
+
+
+
+
+
 module.exports = router;

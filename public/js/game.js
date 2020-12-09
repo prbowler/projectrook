@@ -1,4 +1,7 @@
-
+function subscribe () {
+    let evtSource = new EventSource("<server_URL>/subscribe");
+    evtSource.onmessage = function () { myPageRefresh() };
+}
 
 function deal() {
     $.post("/cards", function(result) {
@@ -14,10 +17,12 @@ function showHand() {
     $.post("/cards/showHand", function(result) {
         let bid = "<input id='bidAmount' type=\"number\" name=\"bidAmount\" step=\"5\"><button id=\"bid\" onclick=\"bid()\">Bid</button>";
         let pass = "<button id=\"pass\" onclick=\"hideBid()\">Pass</button>";
+        let subcribeButton = "<button id=\"subscribe\" onclick=\"subscribe()\">Subscibe</button>";
         console.log("game.js result showHand", result);
         $("#show-hand").hide();
         $("#game-menu").append(bid);
         $("#game-menu").append(pass);
+        $("#game-menu").append(subcribeButton);
         result.forEach(function(r) {
             let renderedCard = renderCard(r);
             $("#cards").append(renderedCard);
@@ -80,7 +85,7 @@ function newTrick() {
         gameName: gameName,
         round: round,
         trickNumber: trickNumber
-    }
+    };
     $.post("/card/newTrick", params, function(result) {
         $("#bidAmount").show();
         $("#bid").show();
