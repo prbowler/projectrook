@@ -85,7 +85,7 @@ function bid(req, res) {
 
 function subscribe(req, res, next) {
     // send headers to keep connection alive
-    const headers = {
+    /*const headers = {
         'Content-Type': 'text/event-stream',
         'Connection': 'keep-alive',
         'Cache-Control': 'no-cache'
@@ -100,7 +100,21 @@ function subscribe(req, res, next) {
 
     // listen for client 'close' requests
     req.on('close', () => { client = null; });
-    next();
+    next();*/
+    app.get('/sse-server', function (req, res) {
+        res.status(200).set({
+            "connnection": "keep-alive",
+            "cache-control": "no-cache",
+            "content-Type": "text/event-stream"
+        })
+        const data = {
+            message: "hello, world!"
+        }
+        setInterval(() => {
+            data.timestamp = Date.now()
+            res.write('data: Hello world!\n\n')
+        }, 5000)
+    });
 }
 
 function sendRefresh(req, res, next) {
