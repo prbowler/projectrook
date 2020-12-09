@@ -1,5 +1,5 @@
 function subscribe () {
-    let evtSource = new EventSource("<server_URL>/subscribe");
+    let evtSource = new EventSource("/games/subscribe");
     evtSource.onmessage = function () { myPageRefresh() };
 }
 
