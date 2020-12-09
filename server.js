@@ -41,5 +41,21 @@ app.use('/players', playerRouter);
 app.use('/cards', cardRouter);
 app.use('/games', gameRouter);
 
+//Server Sent Events  https://medium.com/@moinism/using-nodejs-for-uni-directional-event-streaming-sse-c80538e6e82e
+app.get('/sse-server', function (req, res) {
+   res.status(200).set({
+       "connnection": "keep-alive",
+       "cache-control": "no-cache",
+       "content-Type": "text/event-stream"
+   })
+    const data = {
+       message: "hello, world!"
+    }
+    setInterval(() => {
+        data.timestamp = Date.now()
+        res.write('data: Hello world!\n\n')
+    }, 5000)
+});
+
 //Listen on port
 app.listen(PORT, () => console.log(`Listening on ${ PORT }`));

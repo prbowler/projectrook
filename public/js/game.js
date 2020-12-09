@@ -1,6 +1,10 @@
 function subscribe () {
-    let evtSource = new EventSource("/games/subscribe");
-    evtSource.onmessage = function () { myPageRefresh() };
+    //let evtSource = new EventSource("/games/subscribe");
+    //evtSource.onmessage = function () { myPageRefresh() };
+    const evtSource = new EventSource("/sse-server");
+    evtSource.onmessage = function (e) {
+        console.log("subscribe", e.data);
+    }
 }
 
 function deal() {
