@@ -110,10 +110,17 @@ function newTrick() {
         round: round,
         trickNumber: trickNumber
     };
-    $.post("/card/newTrick", params, function(result) {
+    $.post("/cards/newTrick", params, function(result) {
         $("#bidAmount").show();
         $("#bid").show();
         $("#pass").show();
+    });
+}
+
+function getTrickWinner() {
+    console.log("getTrickWinner");
+    $post("/games/getTrickWinner", function(result) {
+        $("#status").text(JSON.stringify(result));
     });
 }
 
