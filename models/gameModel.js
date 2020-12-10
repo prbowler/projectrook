@@ -27,7 +27,7 @@ function addGameToDB(values, callback) {
 
 function getBid(values, callback) {
     console.log("getBid");
-    const sql = "SELECT bid, bidwinner FROM game WHERE name = $1";
+    const sql = "SELECT bid, bidwinner, pass FROM game WHERE name = $1";
     db.selByValues(sql, values, callback);
 }
 
@@ -37,7 +37,11 @@ function updateBid(values, callback) {
     db.add(sql, values, callback);
 }
 
-
+function updateBidPass(values, callback) {
+    console.log("update pass");
+    const sql = "UPDATE game SET pass = array_append(pass, $1) WHERE name = $2";
+    db.add(sql, values, callback);
+}
 
 function updateTrick(values, callback) {
     console.log("updateBid");
@@ -52,5 +56,6 @@ module.exports = {
     addGameToDB: addGameToDB,
     getBid: getBid,
     updateBid: updateBid,
+    updateBidPass: updateBidPass,
     updateTrick: updateTrick
 };

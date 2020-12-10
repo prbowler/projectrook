@@ -83,6 +83,27 @@ function bid(req, res) {
     });
 }
 
+function checkBid(req, res) {
+    console.log("checkBid");
+    let gameName = req.session.game[0].name;
+    let values = [gameName];
+    gameModel.getGameFromDB(values, function(error, result) {
+        console.log("bid results ", result.rows[0]);
+        res.json(result.rows);
+    });
+}
+
+function pass(req, res) {
+    console.log("pass");
+    let gameName = req.session.game[0].name;
+    let player = req.session.user;
+    let values = [player, gameName];
+    gameModel.updateBidPass(values, function(error, result) {
+        console.log("bid results ");
+        res.json(result);
+    });
+}
+
 function subscribe(req, res, next) {
     // send headers to keep connection alive
     /*const headers = {
@@ -108,11 +129,11 @@ function subscribe(req, res, next) {
             "content-Type": "text/event-stream"
         })
         const data = {
-            message: "hello, world!"
+            message: "update"
         }
         setInterval(() => {
             data.timestamp = Date.now()
-            res.write('data: Hello world!\n\n')
+            res.write('data: update\n\n')
         }, 5000)
     });
 }
@@ -130,6 +151,8 @@ module.exports = {
     showGames: showGames,
     joinGame: joinGame,
     bid: bid,
+    checkBid: checkBid,
+    pass: pass,
     subscribe: subscribe,
     sendRefresh: sendRefresh
 };

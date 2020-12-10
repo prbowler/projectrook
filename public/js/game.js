@@ -4,6 +4,10 @@ function subscribe () {
     const evtSource = new EventSource("/sse-server");
     evtSource.onmessage = function (e) {
         console.log("subscribe", e.data);
+        if (e.data === 'update') {
+            console.log("It's time to update");
+            showTrick({trickID: 1});
+        }
     }
 }
 
@@ -20,13 +24,15 @@ function deal() {
 function showHand() {
     $.post("/cards/showHand", function(result) {
         let bid = "<input id='bidAmount' type=\"number\" name=\"bidAmount\" step=\"5\"><button id=\"bid\" onclick=\"bid()\">Bid</button>";
-        let pass = "<button id=\"pass\" onclick=\"hideBid()\">Pass</button>";
+        let pass = "<button id=\"pass\" onclick=\"pass()\">Pass</button>";
         let subcribeButton = "<button id=\"subscribe\" onclick=\"subscribe()\">Subscibe</button>";
+        let checkBid = "<button id=\"check_bid\" onclick=\"checkBid()\">Check Bid</button>";
         console.log("game.js result showHand", result);
         $("#show-hand").hide();
         $("#game-menu").append(bid);
         $("#game-menu").append(pass);
         $("#game-menu").append(subcribeButton);
+        $("#game-menu").append(checkBid);
         result.forEach(function(r) {
             let renderedCard = renderCard(r);
             $("#cards").append(renderedCard);
@@ -34,12 +40,15 @@ function showHand() {
     });
 }
 
-function hideBid() {
+function pass() {
     let newTrick = "<button id=\"newTrick\" onclick=\"newTrick()\">New Trick</button>";
     $("#bidAmount").hide();
     $("#bid").hide();
     $("#pass").hide();
     $("#game-menu").append(newTrick);
+    $.post("/games/pass", function(result) {
+        console.log("game.js result", result);
+    });
     $(".card").click(function() {
         $(this).hide();
         let suit = this.children[0].className.slice(11);
@@ -57,6 +66,17 @@ function bid() {
     let params = {bidAmount: bidAmount};
     $.post("/games/bid", params, function(result) {
        $("#status").text(JSON.stringify(result));
+    });
+}
+
+function checkBid() {
+    console.log("checkbid");
+    $.post("/games/checkBid", function(result) {
+        let gameInfo = '<span id="game-name">Game Name:' + result[0].name + '</span><span id="players">Players: ' + result[0].player1 +
+            ' ' + result[0].player2 + ' ' + result[0].player3 + ' ' + result[0].player4 + '</span><span id="score">Score Team1: ' +
+            result[0].score1 + 'ScoreTeam1: ' + result[0].score2 + '</span>';
+        $("#game-info").html(gameInfo);
+        $("#status").text(JSON.stringify(result));
     });
 }
 

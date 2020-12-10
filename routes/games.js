@@ -17,6 +17,8 @@ router.get('/show', gameController.showGames);
 router.get('/create', gameController.newGame);
 router.get('/join', gameController.joinGame);
 router.post('/bid', gameController.bid);
+router.post("/pass",gameController.pass);
+router.post("/checkBid",gameController.checkBid);
 
 //subscribe https://stackoverflow.com/questions/60115833/how-do-i-refresh-browser-from-server-side-with-node-js
 router.get('/subscribe', gameController.subscribe);

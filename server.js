@@ -49,11 +49,11 @@ app.get('/sse-server', function (req, res) {
        "content-Type": "text/event-stream"
    })
     const data = {
-       message: "hello, world!"
+       message: "update"
     }
     setInterval(() => {
         data.timestamp = Date.now()
-        res.write('data: Hello world!\n\n')
+        res.write('data: update\n\n')
     }, 5000)
 });
 

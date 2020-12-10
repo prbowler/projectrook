@@ -9,14 +9,8 @@
     <% include ../partials/banner.ejs %>
 </head>
 <body>
-<div id="game-info">
-    <% game.forEach(function(r) { %>
-    <span id="game-name">Game Name <%= r.name; %></span>
-    <span id="players">Players: <%= r.player1 + " " + r.player2 + " " + r.player3 + " " + r.player4 %></span>
-    <span id="score">Score Team1: <%=r.score1%> ScoreTeam1: <%=r.score2%></span>
-        <% }); %>
-        <div id="status"></div>
-</div>
+<div id="game-info"></div>
+<div id="status"></div>
 <div id="game-menu">
     <button id="deal" onclick="deal();">Deal</button>
 </div>

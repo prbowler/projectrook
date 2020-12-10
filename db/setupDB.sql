@@ -79,6 +79,7 @@ CREATE TABLE game (
     round INT DEFAULT 1,
     hand INT DEFAULT 1,
     bid INT DEFAULT 0,
+    pass VARCHAR(250) [],
     bidwinner VARCHAR(255) REFERENCES player(username)
 );
 
@@ -132,13 +133,9 @@ CREATE TABLE trick_cards (
 );
 
 CREATE TABLE bid (
-    id SERIAL PRIMARY KEY,
-    game VARCHAR(250) references game(name),
+    bidGame VARCHAR(250) references game(name),
     round INT,
-    passP1 BOOLEAN DEFAULT FALSE,
-    passP2 BOOLEAN DEFAULT FALSE,
-    passP3 BOOLEAN DEFAULT FALSE,
-    passP4 BOOLEAN DEFAULT FALSE,
+    pass VARCHAR[],
     amount INT DEFAULT 0,
     bidWinner VARCHAR(250) references player(username)
 );
@@ -157,4 +154,4 @@ select c.id, c.suit, c.value from card as c, hand as h where c.id = ANY(h.cards)
 
 ALTER TABLE game ADD COLUMN bid INT DEFAULT 0;
 ALTER TABLE game ADD COLUMN bidwinner VARCHAR(255) REFERENCES player(username);
-
+ALTER TABLE game ADD COLUMN pass VARCHAR(255) [];
