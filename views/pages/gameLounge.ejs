@@ -5,11 +5,11 @@
     <script src="../js/gameLounge.js"></script>
 </head>
 
-<body>
+<body onload="setup()">
 <header><% include ../partials/banner.ejs %></header>
 <div id="user"></div>
 <div id="status"></div>
-<div id="game_list"><% include ../partials/gameList.ejs %></div>
+<div id="game_list"></div>
 <div id="new_game">
     <button id="new_game_button" onclick="showForm()">New Game</button>
 </div>

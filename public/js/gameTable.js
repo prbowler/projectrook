@@ -8,8 +8,7 @@ let gameInfo = '<span id="game-name">Game Name:' + result[0].name + '</span><spa
     result[0].score1 + 'ScoreTeam1: ' + result[0].score2 + '</span>';
 */
 
-let bidForm = "<input id='bidAmount' type=\"number\" name=\"bidAmount\" step=\"5\"><button id=\"bid\" onclick=\"bid()\">Bid</button>";
-let passButton = "<button id=\"pass\" onclick=\"pass()\">Pass</button>";
+const html = require('./html');
 
 function setupTable() {
     showHand();

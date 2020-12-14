@@ -4,19 +4,15 @@
     <meta charset="UTF-8">
     <title>Login</title>
     <link rel="stylesheet" type="text/css" href="/stylesheets/login.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="../js/login.js"></script>
 </head>
-<body>
-
+<body onload="setupLoginPage()">
+<header><% include ../partials/banner.ejs %></header>
+<h1>Welcome to Rook</h1>
 <div id="status"></div>
-<h2>Please Login or create an account to play</h2>
-<form action="/players/validate" method="post">
-    <label for="username">Username</label>
-    <input type="text" name="username">
-    <label for="password">Password</label>
-    <input type="password" name="password">
-    <input type="submit" class="submit">
-    <a href="/players/add" class="new_user">New User</a>
-</form>
-
+<div id="login_menu"></div>
+<div id="login_form"></div>
+<footer><% include ../partials/footer.ejs %></footer>
 </body>
 </html>

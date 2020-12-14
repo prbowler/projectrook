@@ -1,21 +1,13 @@
-const logoutLink = '<li id="logout_link"><a href="/players/logout">Logout</a></li>';
-const loginLink = '<li id="login_link"><a onclick="setupLogin()">Login</a></li>';
-const newPlayerLink = '<li id="login_link"><a onclick="setupNewPlayer()">New Player</a></li>';
-const gamesLink = '<li id="games_link"><a href="/games/show">Games</a></li>';
-const loginForm = '<label for="username">Username</label>' +
-    '<input type="text" name="username" id="username">' +
-    '<label for="password">Password</label>' +
-    '<input type="password" name="password" id="password">';
 
-const preLogin = '<h2 id="pre_login">Please Login or create an account to play</h2>';
-const loginMessage = '<h2 id="login_message">Please Login to play</h2>';
-const newPlayerMessage = '<h2 id="new_player_message">Please create an account to play</h2>';
-const loginButton = '<button id="login" onclick="login()">login</button>';
-const newPlayerButton = '<button id="new_player" onclick="newPlayer()">Create New Player</button>';
-const setupLoginButton = '<button id="login_button" onclick="setupLogin()">Login</button>';
-const setupNewPlayerButton = '<button id="new_player_button" onclick="setupNewPlayer()">New Player</button>';
 
-function setupBanner() {
+function setupPage() {
+    //$("#login_menu").append(preLogin);
+    //$("#login_menu").append(setupLoginButton);
+    //$("#login_menu").append(setupNewPlayerButton);
+    setupBanner();
+}
+
+/*function setupBanner() {
     console.log("Banner Loaded");
     $.post("/players/user", function(data, result) {
         console.log("bannerdata", data);
@@ -94,4 +86,4 @@ function newPlayer() {
             $("#status").text("Error adding player.");
         }
     });
-}
+}*/

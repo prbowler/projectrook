@@ -25,7 +25,20 @@ function getTeam(req, res, callback) { //SELECT * FROM team WHERE gameName = $1
     });
 }
 
+function getGamesOfPlayer(req, res, callback) {
+    console.log("getGamesOfPlayer-team");
+    let values = req.session.player;
+    teamModel.getGamesOfPlayer(values, function(error, result) {
+        if (!error && result) {
+            callback(result);
+        } else {
+            callback(error);
+        }
+    });
+}
+
 module.exports = {
     addTeam: addTeam,
-    getTeam: getTeam
+    getTeam: getTeam,
+    getGamesOfPlayer: getGamesOfPlayer
 };

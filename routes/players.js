@@ -3,7 +3,8 @@ let router = express.Router();
 const playerController = require("../controllers/playerController.js");
 
 //User routes
-router.post('/', playerController.addPlayer);
+router.post('/login', playerController.login);
+router.post('/add', playerController.addPlayer);
 router.post('/getOne', playerController.getPlayer);
 router.post('/get', playerController.getPlayers);
 router.post('/validate', playerController.validatePlayer);

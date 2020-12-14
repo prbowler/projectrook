@@ -10,7 +10,7 @@ function addGame(values, callback) {
 function getGames(callback) {
     console.log("getGamesFromDB");
     const sql = "SELECT * FROM game";
-    db.selByValues(sql, callback);
+    db.sel(sql, callback);
 }
 
 function getGame(values, callback) {

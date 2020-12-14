@@ -12,13 +12,14 @@ function addGame(req, res) { //INSERT INTO game (name) VALUES ($1)
 }
 
 function showGames(req, res) { //SELECT * FROM game
-    gameModel.getGames(function(error, result) {
+    res.render('pages/gameLounge');
+    /*gameModel.getGames(function(error, result) {
         if (!error && result.rows) {
             res.render('pages/gameLounge', {games: result.rows});
         } else {
             console.log("error showing games");
         }
-    });
+    });*/
 }
 
 function getGame(req, res, callback) { //SELECT * FROM game WHERE name = $1

@@ -52,10 +52,10 @@ app.set('view engine', 'ejs');
 
 
 //Set the routers
-//app.use('/', mainRouter);
+app.use('/', mainRouter);
 app.use('/players', playerRouter);
 app.use('/cards', cardRouter);
-app.use('/', gameRouter);
+app.use('/games', gameRouter);
 app.use('/hands', handRouter);
 app.use('/bids', bidRouter);
 app.use('/rounds', roundRouter);

@@ -1,10 +1,10 @@
-let gameForm = '<div id="game_form">' +
+const gameForm = '<div id="game_form">' +
     '<label for="gameName">Game Name</label>' +
     '<input id="gameName" type="text" name="gameName">' +
     '<button id="create_game" onclick="createGame()">Create Game</button>' +
     '</div>';
 
-let gamePlayers = '<div id="game_players">' +
+const gamePlayers = '<div id="game_players">' +
     '<label for="player1">Player1</label>' +
     '<select name="player1" id="player1"></select>' +
     '<label for="player2">Player2</label>' +
@@ -16,10 +16,16 @@ let gamePlayers = '<div id="game_players">' +
     '<button id="create_game" onclick="createTeams()">Create Teams</button>' +
     '</div>';
 
+const gameList = '<% include ../partials/gameList.ejs %>'
+
 let gameName = '';
 let users = [];
 let players = [];
 let cards = [];
+
+function setup() {
+
+}
 
 function showForm() {
     $("#new_game").append(gameForm);

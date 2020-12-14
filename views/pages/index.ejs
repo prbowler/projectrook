@@ -1,16 +1,19 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <% include ../partials/banner.ejs %>
+  <meta charset="UTF-8">
+  <title>Login</title>
+  <link rel="stylesheet" type="text/css" href="/stylesheets/index.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="../js/start.js"></script>
+  <script src="../js/banner.js"></script>
 </head>
-
-<body>
-
-<div>
-  <form id="start" action="/cards" method="get">
-    <input type="submit" value="Deal Cards">
-  </form>
-</div>
-<% include ../partials/footer.ejs %>
+<body onload="setupPage()">
+<header><% include ../partials/banner.ejs %></header>
+<h1>Welcome to Rook</h1>
+<div id="status"></div>
+<div id="login_menu"></div>
+<div id="login_form"></div>
+<footer><% include ../partials/footer.ejs %></footer>
 </body>
 </html>

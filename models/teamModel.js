@@ -12,7 +12,14 @@ function getTeam(values, callback) {
     db.selByValues(sql, values, callback);
 }
 
+function getGamesOfPlayer(values, callback) {
+    console.log("getGamesOfPlayer-team-model");
+    const sql = "SELECT gamename FROM team WHERE ANY(players) = $1";
+    db.selByValues(sql, values, callback);
+}
+
 module.exports = {
     addTeam: addTeam,
-    getTeam: getTeam
+    getTeam: getTeam,
+    getGamesOfPlayer: getGamesOfPlayer
 };

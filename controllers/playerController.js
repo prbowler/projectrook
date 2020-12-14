@@ -2,26 +2,22 @@ const playerModel = require("../models/playerModel.js");
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
+
+
 function addPlayer(req, res) { //INSERT INTO player (username, password) VALUES ($1, $2)
     console.log("addPlayer");
     let username = req.body.username;
     let password = req.body.password;
     bcrypt.hash(password, saltRounds, function(err, hash) {
         let values = [username, hash];
-        playerModel.addPlayer(values, function(error, results) {
-            if (!error && results) {
-                console.log("new player results", results);
+        playerModel.addPlayer(values, function(error, result) {
+            if (!error && result) {
+                result = {success: true};
                 req.session.player = username;
-                req.session.save(function(err) {
-                    if (!err) {
-                        res.redirect('/');
-                    } else {
-                        res.render('pages/login', {title: 'Login'});
-                    }
-                });
+                res.render('pages/gameLounge', { title: 'Game Lounge' });
+                //res.json(result);
             } else {
-                console.log("could not add player");
-                res.render('pages/login', { title: 'Login' });
+                res.json(error);
             }
         });
     });
@@ -48,26 +44,16 @@ function validatePlayer(req, res) {
     playerModel.getPlayer(values, function(error, results) {
         console.log(results.rows.length);
         if (error || !results.rows.length) {
-            res.render('pages/login', { title: 'Login' });
+            res.json(error);
         } else {
-            bcrypt.compare(password, results.rows[0].password, function (err, result) {
+            bcrypt.compare(password, results.rows[0].password, function (error, result) {
                 if (!error && result) {
                     req.session.player = username;
-                    //res.cookie('user', req.body.username);
-                    console.log("user login: ", result);
-                    console.log("req.session.player ", req.session.player);
-                    req.session.save(function(err) {
-                        if (!err) {
-                            res.redirect('/');
-                        } else {
-                            res.render('pages/login', {title: 'Login'});
-                        }
-                    });
-
-                    //result = {success: true};
-                    //callback(null, result);
+                    result = {success: true};
+                    //res.json(result);
+                    res.render('pages/gameLounge', { title: 'Game Lounge' });
                 } else {
-                    res.render('pages/login', { title: 'Login' });
+                    res.json(error);
                 }
             });
         }
@@ -87,13 +73,17 @@ function requireLogin(req, res, next) {
 
 function logout(req, res) {
     console.log("logout");
-    req.session.destroy();
-    res.redirect('/');
+    let result = {success: false};
+    if (req.session.player) {
+        req.session.destroy();
+        result = {success: true};
+    }
+    res.render('pages/index', { title: 'Home' });
 }
 
 function getUser (req, res) {
-    let result = {user: req.session.player};
-    console.log("user", req.session.player);
+    let result = {player: req.session.player};
+    console.log("server result", result);
     res.json(result);
 }
 
@@ -113,8 +103,16 @@ function getUsers(req, res, callback) {
     console.log("getUsers");
     playerModel.getUsers(function(error, results) {
         console.log("server results: ", results);
-        res.json(results);
+        callback(error, results);
     });
+}
+
+function startPage(req, res) {
+    res.render('pages/index', { title: 'Home' });
+}
+
+function login(req, res) {
+    res.render('pages/login');
 }
 
 module.exports = {
@@ -125,5 +123,7 @@ module.exports = {
     requireLogin: requireLogin,
     logout: logout,
     getUser: getUser,
-    getUsers: getUsers
+    getUsers: getUsers,
+    startPage: startPage,
+    login: login
 };
