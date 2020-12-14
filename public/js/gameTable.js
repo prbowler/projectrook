@@ -40,14 +40,14 @@ function showHand() {
 }
 
 function pass() {
-/*
     $("#bidAmount").hide();
     $("#bid").hide();
     $("#pass").hide();
-    $("#game-menu").append(newTrick);
-    $.post("/games/pass", function(result) {
+    let params = {bid: "pass"};
+    $.post("/bids/addOne", params, function(result) {
         console.log("game.js result", result);
     });
+    /*
     $(".card").click(function() {
         $(this).hide();
         let suit = this.children[0].className.slice(11);

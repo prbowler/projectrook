@@ -24,7 +24,7 @@ function getBid(req, res, callback) { //SELECT * FROM bid WHERE gameName = $1
 
 function addOneBid(req, res) { //UPDATE bid SET bids = array_append(bids, $1) WHERE gameName = $2
     console.log("addOneBid");
-    let bid = res.body.bid;
+    let bid = {player: req.session.player, bid: req.body.bid};
     let values = [bid, req.session.game];
     bidModel.addOneBid(values, function(error, result) {
         if (!error && result) {
