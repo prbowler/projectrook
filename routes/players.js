@@ -3,23 +3,14 @@ let router = express.Router();
 const playerController = require("../controllers/playerController.js");
 
 //User routes
-router.get('/', playerController.getPlayers);
-router.post('/', playerController.getPlayers);
+router.post('/', playerController.addPlayer);
+router.post('/getOne', playerController.getPlayer);
+router.post('/get', playerController.getPlayers);
 router.post('/validate', playerController.validatePlayer);
-router.get('/create', playerController.addPlayer);
-router.get('/add', function(req, res, next) {
-    console.log("addPlayer");
-    res.render('pages/newPlayer', { title: 'New Player' });
-});
-router.get('/login', function(req, res, next) {
-    console.log("login");
-    res.render('pages/login', { title: 'Login' });
-});
+router.post('/require', playerController.requireLogin);
+router.post('/logout', playerController.logout);
 router.get('/logout', playerController.logout);
-
-
-
-
-
+router.post('/user', playerController.getUser);
+router.post('/getUsers', playerController.getUsers);
 
 module.exports = router;

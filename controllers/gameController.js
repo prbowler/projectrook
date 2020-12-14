@@ -1,76 +1,97 @@
 const gameModel = require("../models/gameModel.js");
-let session = require('express-session');
-const cardController = require("./cardController.js");
-let client = null;
 
-function returnToGame(req, res) {
-    console.log("return to the game");
-}
-
-function getGames(req, res) {
-    gameModel.getGamesFromDB(function(error, result) {
-        //res.json(result);
-        console.log("result: ", result);
-        res.render('pages/gameLounge', {games: result.rows});
-    });
-}
-
-function getGame(gamename, req, res) {
-    //let gameName = 'test';
+function addGame(req, res) { //INSERT INTO game (name) VALUES ($1)
+    console.log("game name: ", req.body.gameName);
+    let gameName = req.body.gameName;
     let values = [gameName];
-    gameModel.getGameFromDB(values,function(error, results) {
+    gameModel.addGame(values, function(error, results) {
+        console.log("error",error);
+        console.log("results", results);
         res.json(results);
     });
 }
 
-function newGame(req, res) {
-    let gameName = req.query.gameName;
-    let player1 = req.query.player1;
-    let player2 = req.query.player2;
-    let player3 = req.query.player3;
-    let player4 = req.query.player4;
-    let values = [gameName, player1, player2, player3, player4];
-    gameModel.addGameToDB(values, function(error, results) {
-        res.json(results);
+function showGames(req, res) { //SELECT * FROM game
+    gameModel.getGames(function(error, result) {
+        if (!error && result.rows) {
+            res.render('pages/gameLounge', {games: result.rows});
+        } else {
+            console.log("error showing games");
+        }
     });
 }
 
-function showGames(req, res) {
-    let result = getGames(req, res);
-    res.json(result);
+function getGame(req, res, callback) { //SELECT * FROM game WHERE name = $1
+    let gameName = req.session.game;
+    let values = [gameName];
+    gameModel.getGame(values,function(error, results) {
+        callback(results);
+    });
 }
 
 function joinGame(req, res) {
     console.log("joinGame");
-    let name = req.query.game;
-    let values = [name];
-    gameModel.getGameFromDB(values, function(error, result) {
-        console.log("result: ", result.rows);
-        req.session.game = result.rows;
-        console.log("session.game: ", req.session.game);
-        //res.redirect('/cards/showHand');
-        res.render('pages/gameTable', {game: result.rows});
-        //res.json(result);
+    let result = {
+        success: false
+    };
+    let player = req.session.player;
+    let gameName = req.body.gameName;
+    console.log("player ", player);
+    console.log("gameName ", gameName);
+    req.session.game = gameName;
+    req.session.save(function(err) {
+        if (!err) {
+            res.redirect('/');
+        } else {
+            res.render('pages/login', {title: 'Login'});
+        }
     });
+    if (player && gameName) {
+        result = {
+            success: true,
+            player: player,
+            gameName: gameName,
+            joined: true
+        }
+    }
+    //callback(null, result);
+    res.render('pages/gameTable', result);
 }
+
+module.exports = {
+    addGame: addGame,
+    showGames: showGames,
+    getGame: getGame,
+    joinGame: joinGame
+};
+
+/*
 
 function bid(req, res) {
     console.log("bid", req.body.bidAmount);
     let bid = req.body.bidAmount;
     let gameName = req.session.game[0].name;
-    console.log("gameName ", gameName)
-    let values = [gameName];
+    let player = req.session.player;
+    let stringBids = player + ": " + bid;
+    //let stringBids = "hellow";
+    let bids = [stringBids];
+    console.log("gameName ", gameName);
+    let values = [bid, player, stringBids, gameName];
+    gameModel.updateBid(values, function(error, result) {
+        console.log(result);
+        res.json(result);
+    });
     gameModel.getBid(values, function(error, result) {
         console.log("bid results ", result.rows[0].bid);
         if (result && result.rows[0].bid < bid ) {
-            let values = [bid, req.session.user, gameName];
+            let values = [bid, req.session.player, gameName];
             gameModel.updateBid(values, function(error, result) {
                 res.json(result);
             });
             result = {
                 success: true,
                 bid: bid,
-                bidwinner: req.session.user
+                bidwinner: req.session.player
             };
         } else {
             result = {
@@ -87,7 +108,7 @@ function checkBid(req, res) {
     console.log("checkBid");
     let gameName = req.session.game[0].name;
     let values = [gameName];
-    gameModel.getGameFromDB(values, function(error, result) {
+    gameModel.getGame(values, function(error, result) {
         console.log("bid results ", result.rows[0]);
         res.json(result.rows);
     });
@@ -96,9 +117,9 @@ function checkBid(req, res) {
 function pass(req, res) {
     console.log("pass");
     let gameName = req.session.game[0].name;
-    let player = req.session.user;
+    let player = req.session.player;
     let values = [player, gameName];
-    gameModel.updateBidPass(values, function(error, result) {
+    gameModel.update(values, function(error, result) {
         console.log("bid results ");
         res.json(result);
     });
@@ -106,7 +127,7 @@ function pass(req, res) {
 
 function subscribe(req, res, next) {
     // send headers to keep connection alive
-    /*const headers = {
+    const headers = {
         'Content-Type': 'text/event-stream',
         'Connection': 'keep-alive',
         'Cache-Control': 'no-cache'
@@ -121,7 +142,7 @@ function subscribe(req, res, next) {
 
     // listen for client 'close' requests
     req.on('close', () => { client = null; });
-    next();*/
+    next();
     app.get('/sse-server', function (req, res) {
         res.status(200).set({
             "connnection": "keep-alive",
@@ -143,9 +164,28 @@ function sendRefresh(req, res, next) {
     next();
 }
 
+function setGameName(req, res, next) {
+    console.log("setGameName", req.query.game);
+    if (!req.query.game) {
+        res.redirect('/lounge');
+    } else {
+        gameName = req.query.game;
+        req.session.game = gameName;
+        console.log("gameName: ", gameName);
+        next();
+    }
+}
+
+function requireGamName(req, res, next) {
+    console.log("check for gameName");
+    if (req.session && req.session.game) {
+        next();
+    } else {
+        res.redirect('/games');
+    }
+}
 
 module.exports = {
-    getGames: getGames,
     getGame: getGame,
     newGame: newGame,
     showGames: showGames,
@@ -154,5 +194,7 @@ module.exports = {
     checkBid: checkBid,
     pass: pass,
     subscribe: subscribe,
-    sendRefresh: sendRefresh
-};
+    sendRefresh: sendRefresh,
+    setGamName: setGameName,
+    requireGameName: requireGamName
+};*/

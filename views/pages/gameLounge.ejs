@@ -1,16 +1,18 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <% include ../partials/banner.ejs %>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="../js/gameLounge.js"></script>
 </head>
 
 <body>
-    <% include ../partials/gameList.ejs %>
-<div>
-    <form id="newGame" action="/games/newGame" method="get">
-        <input type="submit" value="New Game">
-    </form>
+<header><% include ../partials/banner.ejs %></header>
+<div id="user"></div>
+<div id="status"></div>
+<div id="game_list"><% include ../partials/gameList.ejs %></div>
+<div id="new_game">
+    <button id="new_game_button" onclick="showForm()">New Game</button>
 </div>
-<% include ../partials/footer.ejs %>
+<footer><% include ../partials/footer.ejs %></footer>
 </body>
 </html>

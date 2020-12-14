@@ -98,7 +98,6 @@ CREATE TABLE round_points (
 );
 
 CREATE TABLE hand (
-    id SERIAL PRIMARY KEY,
     gameName VARCHAR(250) references game(name),
     username VARCHAR(250) references player(username),
     cards INT[]
@@ -155,3 +154,7 @@ select c.id, c.suit, c.value from card as c, hand as h where c.id = ANY(h.cards)
 ALTER TABLE game ADD COLUMN bid INT DEFAULT 0;
 ALTER TABLE game ADD COLUMN bidwinner VARCHAR(255) REFERENCES player(username);
 ALTER TABLE game ADD COLUMN pass VARCHAR(255) [];
+ALTER TABLE game ADD COLUMN bids VARCHAR(255) [];
+
+UPDATE game SET bids = array_append(bids, 'prbowler: 165') WHERE name = 'test';
+UPDATE game SET bids = '{}' WHERE name = 'test2';

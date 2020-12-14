@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+<div>
+    <select name="player">
+        <%if (players.length > 0) {
+        players.forEach(function(r) { %>
+        <option value="<%= r.name%>"><%=r.name%></option>
+        <%});}%>
+    </select>
+</div>
+</body>
+</html>

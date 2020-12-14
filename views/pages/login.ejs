@@ -6,6 +6,8 @@
     <link rel="stylesheet" type="text/css" href="/stylesheets/login.css">
 </head>
 <body>
+
+<div id="status"></div>
 <h2>Please Login or create an account to play</h2>
 <form action="/players/validate" method="post">
     <label for="username">Username</label>
@@ -15,6 +17,6 @@
     <input type="submit" class="submit">
     <a href="/players/add" class="new_user">New User</a>
 </form>
-<% include ../partials/footer.ejs %>
+
 </body>
 </html>

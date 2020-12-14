@@ -7,15 +7,9 @@
     <% include ../partials/banner.ejs %>
 </head>
 <body>
-<form action="/players/create" method="get">
+<form action="/players/create" method="post">
     <label for="username">Username</label>
     <input type="text" name="username">
-    <label for="firstName">First Name</label>
-    <input type="text" name="firstName">
-    <label for="lastName">Last Name</label>
-    <input type="text" name="lastName">
-    <label for="email">Email</label>
-    <input type="email" name="email">
     <label for="password">Password</label>
     <input type="password" name="password">
     <input type="submit" class="submit">

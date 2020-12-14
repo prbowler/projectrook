@@ -5,15 +5,13 @@
 
 <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="../js/game.js"></script>
+    <script src="../js/gameTable.js"></script>
     <% include ../partials/banner.ejs %>
 </head>
-<body>
+<body onload="setupTable()">
 <div id="game-info"></div>
 <div id="status"></div>
-<div id="game-menu">
-    <button id="deal" onclick="deal();">Deal</button>
-</div>
+<div id="game-menu"></div>
 <div id="cards"></div>
 <div id="played_cards"></div>
 
