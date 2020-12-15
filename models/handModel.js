@@ -21,13 +21,13 @@ function updateHand(values, callback) {
 
 function addToHand(values, callback) {
     console.log("addToHand");
-    const sql = "UPDATE hand SET cards = array_append(cards, $1) WHERE gameName = $3 AND username = $3";
+    const sql = "UPDATE hand SET cards = array_append(cards, $1) WHERE gameName = $2 AND username = $3";
     db.add(sql, values, callback);
 }
 
 function subtractFromHand(values, callback) {
     console.log("subtract from hand");
-    const sql = "UPDATE hand SET cards = array_remove(cards, $1) WHERE gameName = $3 AND username = $3";
+    const sql = "UPDATE hand SET cards = array_remove(cards, $1) WHERE gameName = $2 AND username = $3";
     db.add(sql, values, callback);
 }
 

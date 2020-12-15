@@ -6,7 +6,11 @@ function getCards(req, res) { //SELECT id, suit, number, value FROM card
         console.log("Cards: ", result);
         shuffleCards(result);
         console.log("Shuffled Cards: ", result);
-        res.json(result);
+        if(!error) {
+            res.json(result);
+        } else {
+            res.json(error);
+        }
     });
 }
 
@@ -14,7 +18,23 @@ function getCardID(req, res) { //SELECT id FROM card WHERE suit = $1 AND number 
     console.log("getCardID");
     let values = [req.body.suit, req.body.number];
     cardModel.getCardID(values, function(error, result) {
-        res.json(result);
+        if(!error) {
+            res.json(result);
+        } else {
+            res.json(error);
+        }
+    });
+}
+
+function getCardIDFSN(req, res) { //SELECT c.id FROM card AS c, suit as s WHERE s.suit = $1 AND s.id = c.suit AND c.number = $2
+    console.log("getCardID");
+    let values = [req.body.suit, req.body.number];
+    cardModel.getCardIDFSN(values, function(error, result) {
+        if(!error) {
+            res.json(result);
+        } else {
+            res.json(error);
+        }
     });
 }
 
@@ -25,20 +45,25 @@ function getCardsFromIDs(req, res) { //SELECT id, suit, number, value FROM card 
     let values = [ids];
     console.log(values);
     cardModel.getCardsFromIDs(values, function(error, result) {
-        res.json(result);
+        if(!error) {
+            res.json(result);
+        } else {
+            res.json(error);
+        }
     });
 }
 
 // Shuffle the cards into a random sequence and return the deck
 function shuffleCards(deck) {
+    console.log("shuffle cards");
     let i, j, k;
-    console.log("Deck: ", deck.length);
-    let max = deck.length;
+    console.log("Deck: ", deck.list.length);
+    let max = deck.list.length;
     for (i = max - 1; i > 0; i--) {
         j = Math.floor(Math.random() * i);
-        k = deck[i];
-        deck[i] = deck[j];
-        deck[j] = k;
+        k = deck.list[i];
+        deck.list[i] = deck.list[j];
+        deck.list[j] = k;
     }
     return deck;
 }
@@ -46,7 +71,8 @@ function shuffleCards(deck) {
 module.exports = {
     getCards: getCards,
     getCardID: getCardID,
-    getCardsFromIDs: getCardsFromIDs
+    getCardsFromIDs: getCardsFromIDs,
+    getCardIDFSN: getCardIDFSN
 };
 
 /*//get one hand

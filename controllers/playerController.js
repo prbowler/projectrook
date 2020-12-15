@@ -9,6 +9,15 @@ function addPlayer(req, res) { //INSERT INTO player (username, password) VALUES 
     bcrypt.hash(password, saltRounds, function(err, hash) {
         let values = [username, hash];
         playerModel.addPlayer(values, function(error, result) {
+            if(!error) {
+                req.session.player = username;
+                result = {
+                    success: true,
+                    player: username
+                };
+            } else {
+                res.json(error);
+            }
             res.json(result);
         });
     });

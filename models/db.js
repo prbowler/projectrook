@@ -8,7 +8,7 @@ function sel(sql, callback) {
         if (error) {
             console.log("DataBase error");
             console.log(error);
-            throw error;
+            callback(error);
         } else {
             let results = {
                 success:true,
@@ -27,7 +27,7 @@ function selByValues(sql, values, callback) {
         if (error) {
             console.log("DataBase error");
             console.log(error);
-            throw error;
+            callback(error);
         } else {
             let results = {
                 success:true,
@@ -46,7 +46,7 @@ function del(sql, values, callback) {
         if (error) {
             console.log("DataBase error");
             console.log(err);
-            throw error;
+            callback(error);
         } else {
             let results = {
                 success:true,
@@ -65,7 +65,7 @@ function add(sql, values, callback) {
         if (error) {
             console.log("DataBase error");
             console.log(error);
-            throw error;
+            callback(error);
         } else {
             let results = {
                 success:true,

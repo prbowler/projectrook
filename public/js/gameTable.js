@@ -1,17 +1,9 @@
-//let showHand = "<button id=\"show-hand\" onclick=\"showHand();\">Show Hand</button>";
-/*
-let subscribeButton = "<button id=\"subscribe\" onclick=\"subscribe()\">Subscibe</button>";
-let checkBid = "<button id=\"check_bid\" onclick=\"checkBid()\">Check Bid</button>";
-let newTrick = "<button id=\"newTrick\" onclick=\"newTrick()\">New Trick</button>";
-let gameInfo = '<span id="game-name">Game Name:' + result[0].name + '</span><span id="players">Players: ' + result[0].player1 +
-    ' ' + result[0].player2 + ' ' + result[0].player3 + ' ' + result[0].player4 + '</span><span id="score">Score Team1: ' +
-    result[0].score1 + 'ScoreTeam1: ' + result[0].score2 + '</span>';
-*/
-
-const html = require('./html');
+const bidForm = "<input id='bidAmount' type=\"number\" name=\"bidAmount\" step=\"5\"><button id=\"bid\" onclick=\"bid()\">Bid</button>";
+const passButton = "<button id=\"pass\" onclick=\"pass()\">Pass</button>";
 
 function setupTable() {
     showHand();
+    showPlayedCards();
 }
 
 function showHand() {
@@ -19,58 +11,120 @@ function showHand() {
         if(!result) {
             $("#status").text("error joining game");
         } else {
-            console.log("hand", data.rows);
-            let params = {ids: data.rows[0].cards};
+            console.log("hand", data.list[0].cards);
+            let params = {ids: data.list[0].cards};
             console.log("params", params);
             $.post("/cards/fromIDs", params, function(data, result) {
                 if(!result) {
                     $("#status").text("error joining game");
                 } else {
-                    console.log("hand cards", data.rows);
-                    data.rows.forEach(function(r) {
+                    console.log("hand cards", data.list);
+                    data.list.forEach(function(r) {
                         $("#cards").append(renderCard(r));
                     });
-                    $("#game-menu").append(bidForm);
-                    $("#game-menu").append(passButton);
                 }
             });
         }
     });
 }
 
-function pass() {
-    $("#bidAmount").hide();
-    $("#bid").hide();
-    $("#pass").hide();
-    let params = {bid: "pass"};
-    $.post("/bids/addOne", params, function(result) {
-        console.log("game.js result", result);
-    });
-    /*
-    $(".card").click(function() {
-        $(this).hide();
-        let suit = this.children[0].className.slice(11);
-        let params = {
-            number: this.children[0].innerHTML,
-            suit: suit
-        };
-        playCard(params);
-    });
- */
+function conductBid() {
+    $("#game-menu").empty();
+    $("#game-menu").append(bidForm);
+    $("#game-menu").append(passButton);
 }
 
+function awardBid() {
+    $("#game-menu").empty();
+    $.post("/bids/get", function(data, result) {
+        if(!result) {
+            $("#status").text("error getting bid");
+        } else {
+            console.log("bids are", data);
+            let bidArray = [];
+            data.list[0].bids.forEach(function(r) {
+               bidArray.push(r.split(": "));
+            });
+            console.log("bidArray", bidArray);
+        }
+    });
+}
+
+function playRound() {
+    playCards();
+}
+
+function newTrick() {
+
+}
+
+function pass() {
+    $("#game-menu").empty();
+    let params = {bid: "pass"};
+    $.post("/bids/addOne", params, function(result) {
+        console.log("result", result);
+    });
+
+}
+
+function playCards() {
+    $(".card").click(function() {
+        playCard(this);
+    });
+}
+
+function playCard(card) {
+    console.log("play card ", card);
+    let suit = card.children[0].className.slice(11);
+    let params = {};
+    if (card.children[0].innerHTML === 'R') {
+        params = {
+            number: 0,
+            suit: 'rook'
+        };
+    } else {
+        params = {
+            number: card.children[0].innerHTML,
+            suit: suit
+        };
+    }
+    $.post("/cards/idFromSN", params, function(data, result) {
+        console.log("cardID", data.list[0].id);
+        let params = {card: data.list[0].id};
+        $.post("/hands/addToTrick", params, function (data, result) {
+            if (!data.success) {
+                console.log("error playing card", data);
+            } else {
+                $.post("/hands/subtract", params, function(data, result) {
+                    if (!data.success) {
+                        console.log("error removing card", data);
+                    } else {
+                        $.post("/tricks/addCard", params, function (data, result) {
+                            if (!data.success) {
+                                console.log("error removing card", data);
+                            } else {
+                                $(card).hide();
+                                location.reload();
+                            }
+                        });
+                    }
+                });
+            }
+        });
+    });
+
+}
+
+
 function bid() {
-    /*
     console.log("bid");
     let bidAmount = $("#bidAmount").val();
     console.log("bid amount ", bidAmount);
     if (!bidAmount || bidAmount === 0) { pass(); }
-    let params = {bidAmount: bidAmount};
-    $.post("/games/bid", params, function(result) {
-        $("#status").text(JSON.stringify(result));
+    let params = {bid: bidAmount};
+    $.post("/bids/addOne", params, function(result) {
+        console.log(result);
     });
-
-    */
 }
 
 function renderCard(card) {
@@ -87,6 +141,26 @@ function renderCard(card) {
     return cardDiv;
 }
 
+function showPlayedCards() {
+    $.post("/hands/getTrick", function(data, result) {
+        console.log("showplayedcards", data.list[0].cards);
+        if(data.success && data.list[0].cards.length > 0) {
+            console.log("played", data.list[0].cards);
+            let params = {ids: data.list[0].cards};
+            console.log("params", params);
+            $.post("/cards/fromIDs", params, function(cardData, results) {
+                if(!results) {
+                    $("#status").text("error joining game");
+                } else {
+                    console.log("played cards", cardData);
+                    cardData.list.forEach(function(r) {
+                        $("#played_cards").append(renderCard(r));
+                    });
+                }
+            });
+        }
+    })
+}
 /*
 
 function deal() {

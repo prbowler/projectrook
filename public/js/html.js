@@ -31,3 +31,14 @@ const loginButton = '<button id="login" onclick="login()">login</button>';
 const newPlayerButton = '<button id="new_player" onclick="newPlayer()">Create New Player</button>';
 const setupLoginButton = '<button id="login_button" onclick="setupLogin()">Login</button>';
 const setupNewPlayerButton = '<button id="new_player_button" onclick="setupNewPlayer()">New Player</button>';
+
+//let showHand = "<button id=\"show-hand\" onclick=\"showHand();\">Show Hand</button>";
+/*
+let subscribeButton = "<button id=\"subscribe\" onclick=\"subscribe()\">Subscibe</button>";
+let checkBid = "<button id=\"check_bid\" onclick=\"checkBid()\">Check Bid</button>";
+let newTrick = "<button id=\"newTrick\" onclick=\"newTrick()\">New Trick</button>";
+let gameInfo = '<span id="game-name">Game Name:' + result[0].name + '</span><span id="players">Players: ' + result[0].player1 +
+    ' ' + result[0].player2 + ' ' + result[0].player3 + ' ' + result[0].player4 + '</span><span id="score">Score Team1: ' +
+    result[0].score1 + 'ScoreTeam1: ' + result[0].score2 + '</span>';
+
+ */

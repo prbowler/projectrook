@@ -5,7 +5,11 @@ function addGame(req, res) { //INSERT INTO game (name) VALUES ($1)
     let gameName = req.body.gameName;
     let values = [gameName];
     gameModel.addGame(values, function(error, results) {
-        res.json(results);
+        if(!error) {
+            res.json(results);
+        } else {
+            res.json(error);
+        }
     });
 }
 
@@ -13,7 +17,11 @@ function getGame(req, res) { //SELECT * FROM game WHERE name = $1
     let gameName = req.session.game;
     let values = [gameName];
     gameModel.getGame(values,function(error, results) {
-        res.json(result);
+        if(!error) {
+            res.json(results);
+        } else {
+            res.json(error);
+        }
     });
 }
 
@@ -38,7 +46,7 @@ function joinGame(req, res) {
         success: false
     };
     let player = req.session.player;
-    let gameName = req.body.gameName;
+    let gameName = req.body.gameSelect;
     console.log("player ", player);
     console.log("gameName ", gameName);
     req.session.game = gameName;
@@ -48,7 +56,7 @@ function joinGame(req, res) {
         gameName: gameName,
         joined: true
     };
-    res.json(result);
+    res.render('pages/gameTable', result);
 }
 
 module.exports = {

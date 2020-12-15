@@ -16,7 +16,8 @@ const gamePlayers = '<div id="game_players">' +
     '<button id="create_game" onclick="createTeams()">Create Teams</button>' +
     '</div>';
 
-const gameList = '<% include ../partials/gameList.ejs %>'
+const gameList = '<form action="/games/join" method="post"><select id="gameSelect" name="gameSelect"></select>' +
+                  '<input type="submit" value="Join Game"></form>';
 
 let gameName = '';
 let users = [];
@@ -40,7 +41,18 @@ function getGames(params) {
     $.post("/teams/getGames", params, function(data, result) {
         console.log("data2", data);
         console.log("result2", result);
+        if(data && data.list.length) {
+            console.log("show games", data.list);
+            showGameList(data.list);
+        }
     });
+}
+
+function showGameList(list) {
+    $("#game_list").append(gameList);
+    for (const game of list) {
+        $("#gameSelect").append('<option value="'+ game.gamename + '">' + game.gamename + '</option>');
+    }
 }
 
 function showForm() {
@@ -54,6 +66,7 @@ function createGame() {
         console.log("clientdata", data);
         console.log("clientresult", results);
         if(!results) {
+            $("#game_form").hide();
             $("#status").text("error creating game");
         } else {
             $.post("/players/getUsers", function(data, result) {
@@ -83,6 +96,7 @@ function createTeams() {
     players.push($("#player3").val());
     players.push($("#player4").val());
     players.push("widow");
+    players.push("trick");
     console.log("players", players);
     let params = {gameName: gameName, players: players};
     $.post("/teams", params, function(data, result) {
@@ -117,6 +131,7 @@ function dealHands(data) {
     let params3 = {gameName: gameName, player: players[2], cards: getID(cards, 20, 30)};
     let params4 = {gameName: gameName, player: players[3], cards: getID(cards, 30, 40)};
     let params5 = {gameName: gameName, player: players[4], cards: getID(cards, 40, 45)};
+    let params6 = {gameName: gameName, player: players[5], cards: []};
     console.log("params ", params1);
     $.post("/hands", params1, function(data, result) {
         if(!result) {
@@ -138,8 +153,14 @@ function dealHands(data) {
                                         if(!result) {
                                             $("#status").text("error dealing widow cards");
                                         } else {
-                                            console.log("hands dealt");
-                                            setupTrick();
+                                            $.post("/hands", params6, function (data, result) {
+                                                if (!result) {
+                                                    $("#status").text("error dealing trick cards");
+                                                } else {
+                                                    console.log("hands dealt");
+                                                    setupTrick();
+                                                }
+                                            });
                                         }
                                     });
                                 }
@@ -201,13 +222,14 @@ function setupScore() {
 }
 
 function joinGame() {
-    let params = {gameName: gameName};
+    let params = {gameSelect: gameName};
     $.post("/games/join", params, function(data, result) {
         if(!result) {
             $("#status").text("error joining game");
         } else {
             console.log("game joined");
-            $("#status").append('<a ')
+            //$("#status").append('<a ');
+            location.reload();
         }
     });
 }

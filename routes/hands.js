@@ -7,7 +7,10 @@ router.post('/', handController.addHand);
 router.post('/get', handController.getHand);
 router.get('/update', handController.updateHand);
 router.post('/add', handController.addToHand);
-router.get('/subtract', handController.subtractFromHand);
-//router.post('/deal', handController.dealHands);
+router.post('/subtract', handController.subtractFromHand);
+router.post('/addToTrick', handController.addToTrick);
+router.post('/addToWidow', handController.addToWidow);
+router.post('/getTrick', handController.getHandTrick);
+router.post('/getWidow', handController.getHandWidow);
 
 module.exports = router;

@@ -1,5 +1,5 @@
 const homeLink = '<li id="home_link"><a href="/">Home</a></li>';
-const logoutLink = '<li id="logout_link"><a href="/players/logout">Logout</a></li>';
+const logoutLink = '<li id="logout_link"><a href="/logout">Logout</a></li>';
 const loginLink = '<li id="login_link"><a onclick="setupLogin()">Login</a></li>';
 const newPlayerLink = '<li id="login_link"><a onclick="setupNewPlayer()">New Player</a></li>';
 const gamesLink = '<li id="games_link"><a href="/games/show">Games</a></li>';
@@ -89,13 +89,16 @@ function newPlayer() {
         password: password
     };
 
-    $.post("/players", params, function(result) {
-        console.log("client-result", reusult);
+    $.post("/players/add", params, function(result) {
+        console.log("client-result", result);
         if (result && result.success) {
             $("#status").text("Successfully added player.");
+            $("#login_form").empty();
+            $("#main-menu").empty();
+            $("#main-menu").append(homeLink);
             $("#main-menu").append(logoutLink);
             $("#main-menu").append(gamesLink);
-            $("#main-menu").append('<li><a>'+ data.player +'</a></li>');
+            $("#main-menu").append('<li><a>'+ result.player +'</a></li>');
         } else {
             $("#status").text("Error adding player.");
         }

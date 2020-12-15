@@ -34,7 +34,7 @@ function handleLogout(req, res) {
         result = {success: true};
     }
 
-    res.json(result);
+    res.render('pages/index', { title: 'Home' });
 }
 
 function verifyLogin(req, res, next) {

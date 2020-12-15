@@ -1,19 +1,26 @@
 <!DOCTYPE html>
 <html>
-<link rel="stylesheet" type="text/css" href="/stylesheets/game.css">
 <link rel="stylesheet" type="text/css" href="/stylesheets/cards.css">
 
 <head>
+    <link rel="stylesheet" type="text/css" href="/stylesheets/gameTable.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="../js/gameTable.js"></script>
-    <% include ../partials/banner.ejs %>
+    <script src="../js/banner.js"></script>
 </head>
 <body onload="setupTable()">
+<header><% include ../partials/banner.ejs %></header>
+<div id="game_buutons">
+    <button id="conduct_bid" onclick="conductBid()">Conduct Bid</button>
+    <button id="award_bid" onclick="awardBid()">Award Bid</button>
+    <button id="play_cards" onclick="playRound()">Play Cards</button>
+    <button id="new_trick" onclick="newTrick()">New Trick</button>
+</div>
 <div id="game-info"></div>
-<div id="status"></div>
+<div id="status"> </div>
 <div id="game-menu"></div>
-<div id="cards"></div>
-<div id="played_cards"></div>
+<div id="cards"><h2>Player Hand</h2></div>
+<div id="played_cards"><h2>Played Cards</h2></div>
 
 <% include ../partials/footer.ejs %>
 </body>
