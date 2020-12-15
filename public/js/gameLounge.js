@@ -24,7 +24,23 @@ let players = [];
 let cards = [];
 
 function setup() {
+    setupBanner();
+    getUser();
+}
 
+function getUser() {
+    $.post("/players/user", function(data, results) {
+        console.log("data", data);
+        console.log("results", results);
+        getGames(data);
+    });
+}
+
+function getGames(params) {
+    $.post("/teams/getGames", params, function(data, result) {
+        console.log("data2", data);
+        console.log("result2", result);
+    });
 }
 
 function showForm() {
@@ -34,7 +50,7 @@ function showForm() {
 function createGame() {
     gameName = $("#gameName").val();
     let params = {gameName: gameName};
-    $.post("/add", params, function(data, results) {
+    $.post("/games/add", params, function(data, results) {
         console.log("clientdata", data);
         console.log("clientresult", results);
         if(!results) {
@@ -47,7 +63,7 @@ function createGame() {
                     console.log("clientresult", result);
                     console.log("clientdata", data);
                     users = [];
-                    for (const d of data) {
+                    for (const d of data.list) {
                         users.push(d.username);
                     }
                     console.log("users ", users);
@@ -73,6 +89,7 @@ function createTeams() {
         if(!result) {
             $("#status").text("error creating teams");
         } else {
+            console.log("teams setup");
             $("#game_players").hide();
             setupGame();
         }
@@ -84,6 +101,7 @@ function setupGame() {
         if(!result) {
             $("#status").text("error getting cards game");
         } else {
+            console.log("cards received");
             console.log("clientresult", result);
             console.log("clientdata", data);
             dealHands(data);
@@ -93,7 +111,7 @@ function setupGame() {
 }
 
 function dealHands(data) {
-    cards = data;
+    cards = data.list;
     let params1 = {gameName: gameName, player: players[0], cards: getID(cards, 0, 10)};
     let params2 = {gameName: gameName, player: players[1], cards: getID(cards, 10, 20)};
     let params3 = {gameName: gameName, player: players[2], cards: getID(cards, 20, 30)};
@@ -184,11 +202,12 @@ function setupScore() {
 
 function joinGame() {
     let params = {gameName: gameName};
-    $.post("/join", params, function(data, result) {
+    $.post("/games/join", params, function(data, result) {
         if(!result) {
             $("#status").text("error joining game");
         } else {
             console.log("game joined");
+            $("#status").append('<a ')
         }
     });
 }

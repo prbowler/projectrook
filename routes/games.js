@@ -1,7 +1,6 @@
 let express = require('express');
 let router = express.Router();
 const gameController = require("../controllers/gameController.js");
-const playerController = require("../controllers/playerController.js");
 
 router.post('/show', gameController.showGames);
 router.get('/show', gameController.showGames);
@@ -9,6 +8,7 @@ router.post('/add', gameController.addGame);
 router.get('/add', gameController.addGame);
 router.post('/get', gameController.getGame);
 router.post('/join', gameController.joinGame);
+router.post('/play', gameController.playGame);
 
 
 

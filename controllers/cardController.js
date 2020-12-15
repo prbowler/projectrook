@@ -1,6 +1,6 @@
 const cardModel = require("../models/cardModel.js");
 
-function getCards(req, res, callback) { //SELECT id, suit, number, value FROM card
+function getCards(req, res) { //SELECT id, suit, number, value FROM card
     console.log('getCards');
     cardModel.getCards(function(error, result) {
         console.log("Cards: ", result);
@@ -10,11 +10,11 @@ function getCards(req, res, callback) { //SELECT id, suit, number, value FROM ca
     });
 }
 
-function getCardID(req, res, callback) { //SELECT id FROM card WHERE suit = $1 AND number = $2
+function getCardID(req, res) { //SELECT id FROM card WHERE suit = $1 AND number = $2
     console.log("getCardID");
     let values = [req.body.suit, req.body.number];
     cardModel.getCardID(values, function(error, result) {
-        callback(null, result);
+        res.json(result);
     });
 }
 
@@ -25,7 +25,6 @@ function getCardsFromIDs(req, res) { //SELECT id, suit, number, value FROM card 
     let values = [ids];
     console.log(values);
     cardModel.getCardsFromIDs(values, function(error, result) {
-        console.log("Cards: ", result);
         res.json(result);
     });
 }

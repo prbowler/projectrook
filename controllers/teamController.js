@@ -7,9 +7,7 @@ function addTeam(req, res) { //INSERT INTO team (gameName, players, team1, team2
     let team2 = [players[1], players[3]];
     let values = [req.body.gameName, players, team1, team2];
     teamModel.addTeam(values, function(error, result) {
-        if (!error && result) {
-            res.json(result);
-        }
+        res.json(result);
     });
 }
 
@@ -17,23 +15,15 @@ function getTeam(req, res, callback) { //SELECT * FROM team WHERE gameName = $1
     console.log("getTeam");
     let values = [req.session.game];
     teamModel.getTeam(values, function(error, result) {
-        if (!error && result) {
-            callback(result);
-        } else {
-            callback(error);
-        }
+        res.json(result);
     });
 }
 
-function getGamesOfPlayer(req, res, callback) {
+function getGamesOfPlayer(req, res) {
     console.log("getGamesOfPlayer-team");
-    let values = req.session.player;
+    let values = [req.session.player];
     teamModel.getGamesOfPlayer(values, function(error, result) {
-        if (!error && result) {
-            callback(result);
-        } else {
-            callback(error);
-        }
+        res.json(result);
     });
 }
 

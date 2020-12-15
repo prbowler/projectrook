@@ -4,54 +4,76 @@ const pool = new Pool({connectionString: connectionString});
 
 function sel(sql, callback) {
     console.log("select ", sql);
-    pool.query(sql, function(error, result) {
+    pool.query(sql, function(error, db_results) {
         if (error) {
             console.log("DataBase error");
             console.log(error);
-            callback(error, null);
+            throw error;
+        } else {
+            let results = {
+                success:true,
+                list:db_results.rows
+            };
+            console.log("Results: " + JSON.stringify(results));
+            callback(null, results);
         }
-        console.log("Results: " + JSON.stringify(result.rows));
-        callback(null, result.rows);
     });
 }
 
 function selByValues(sql, values, callback) {
     console.log("select ", sql);
     console.log("values ", values);
-    pool.query(sql, values, function(error, result) {
+    pool.query(sql, values, function(error, db_results) {
         if (error) {
             console.log("DataBase error");
             console.log(error);
-            callback(error, null);
+            throw error;
+        } else {
+            let results = {
+                success:true,
+                list:db_results.rows
+            };
+            console.log("Results: " + JSON.stringify(results));
+            callback(null, results);
         }
-        console.log("Results: " + JSON.stringify(result));
-        callback(null, result);
     });
 }
 
 function del(sql, values, callback) {
     console.log("delete ", sql);
     console.log("values ", values);
-    pool.query(sql, values, (err, result) => {
-        if (err) {
+    pool.query(sql, values, (error, db_results) => {
+        if (error) {
             console.log("DataBase error");
             console.log(err);
+            throw error;
+        } else {
+            let results = {
+                success:true,
+                list:db_results.rows
+            };
+            console.log("Results: " + JSON.stringify(results));
+            callback(null, results);
         }
-        console.log("Results: " + JSON.stringify(result));
-        callback(null, result);
     });
 }
 
 function add(sql, values, callback) {
     console.log("add ", sql);
     console.log("values ", values);
-    pool.query(sql, values, (err, result) => {
-        if (err) {
+    pool.query(sql, values, (error, db_results) => {
+        if (error) {
             console.log("DataBase error");
-            console.log(err);
+            console.log(error);
+            throw error;
+        } else {
+            let results = {
+                success:true,
+                list:db_results.rows
+            };
+            console.log("Results: " + JSON.stringify(results));
+            callback(null, results);
         }
-        console.log("Results: " + JSON.stringify(result));
-        callback(null, result);
     });
 }
 

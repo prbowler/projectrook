@@ -4,9 +4,7 @@ function addHand(req, res) { //INSERT INTO hand (gameName, userName, cards) VALU
     console.log("addHand");
     let values = [req.body.gameName, req.body.player, req.body.cards];
     handModel.addHand(values, function (error, result) {
-        if (!error && result) {
-            res.json(result);
-        }
+        res.json(result);
     });
 }
 
@@ -14,11 +12,7 @@ function getHand(req, res) { //SELECT * FROM hand WHERE gameName = $1 AND userna
     console.log("getHand", req.session.game + req.session.player);
     let values = [req.session.game, req.session.player];
     handModel.getHand(values, function (error, result) {
-        if (!error && result) {
-            res.json(result);
-        } else {
-            res.json(error);
-        }
+        res.json(result);
     });
 }
 
@@ -26,9 +20,7 @@ function updateHand(req, res) { //UPDATE hand SET cards = $1 WHERE gameName = $2
     console.log("updateHand");
     let values = [req.body.cards, req.session.game, req.session.player];
     handModel.updateHand(values, function(error, result) {
-        if (!error && result) {
-            res.json(result);
-        }
+        res.json(result);
     });
 }
 
@@ -36,9 +28,7 @@ function addToHand(req,res) { //UPDATE hand SET cards = array_append(cards, $1) 
     console.log("addToHand");
     let values = [req.body.card, req.session.game, req.session.player];
     handModel.addToHand(values, function(error, result) {
-        if (!error && result) {
-            res.json(result);
-        }
+        res.json(result);
     });
 }
 
@@ -46,9 +36,7 @@ function subtractFromHand(req, res) { //UPDATE hand SET cards = array_remove(car
     console.log("subtract from hand");
     let values = [req.body.card, req.session.game, req.session.player];
     handModel.subtractFromHand(values, function(error, result) {
-        if (!error && result) {
-            res.json(result);
-        }
+        res.json(result);
     });
 }
 

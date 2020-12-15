@@ -5,9 +5,15 @@ function addGame(req, res) { //INSERT INTO game (name) VALUES ($1)
     let gameName = req.body.gameName;
     let values = [gameName];
     gameModel.addGame(values, function(error, results) {
-        console.log("error",error);
-        console.log("results", results);
         res.json(results);
+    });
+}
+
+function getGame(req, res) { //SELECT * FROM game WHERE name = $1
+    let gameName = req.session.game;
+    let values = [gameName];
+    gameModel.getGame(values,function(error, results) {
+        res.json(result);
     });
 }
 
@@ -22,12 +28,8 @@ function showGames(req, res) { //SELECT * FROM game
     });*/
 }
 
-function getGame(req, res, callback) { //SELECT * FROM game WHERE name = $1
-    let gameName = req.session.game;
-    let values = [gameName];
-    gameModel.getGame(values,function(error, results) {
-        callback(results);
-    });
+function playGame(req, res) {
+    res.render('pages/gameTable');
 }
 
 function joinGame(req, res) {
@@ -40,30 +42,21 @@ function joinGame(req, res) {
     console.log("player ", player);
     console.log("gameName ", gameName);
     req.session.game = gameName;
-    req.session.save(function(err) {
-        if (!err) {
-            res.redirect('/');
-        } else {
-            res.render('pages/login', {title: 'Login'});
-        }
-    });
-    if (player && gameName) {
-        result = {
-            success: true,
-            player: player,
-            gameName: gameName,
-            joined: true
-        }
-    }
-    //callback(null, result);
-    res.render('pages/gameTable', result);
+    result = {
+        success: true,
+        player: player,
+        gameName: gameName,
+        joined: true
+    };
+    res.json(result);
 }
 
 module.exports = {
     addGame: addGame,
     showGames: showGames,
     getGame: getGame,
-    joinGame: joinGame
+    joinGame: joinGame,
+    playGame: playGame
 };
 
 /*

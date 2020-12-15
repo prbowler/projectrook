@@ -4,9 +4,7 @@ function addScore(req, res) { //INSERT INTO score (gameName) VALUES ($1)
     console.log("addScore");
     let values = [req.body.gameName];
     scoreModel.addScore(values, function(error, result) {
-        if (!error && result) {
-            res.json(result);
-        }
+        res.json(result);
     });
 }
 
@@ -14,11 +12,7 @@ function getScore(req, res, callback) { //SELECT * FROM score WHERE gameName = $
     console.log("getScore");
     let values = [req.session.game];
     scoreModel.getScore(values, function(error, result) {
-        if (!error && result) {
-            callback(result);
-        } else {
-            callback(error);
-        }
+        res.json(result);
     });
 }
 
@@ -26,9 +20,7 @@ function setScoreInfo(req, res) { //UPDATE score SET gameScore = $1, roundScore 
     console.log("setScoreInfo");
     let values = [req.body.gameScore, req.body.roundScore, req.body.trickScore, req.session.game];
     scoreModel.setScoreInfo(values, function(error, result) {
-        if (!error && result) {
-            res.json(result);
-        }
+        res.json(result);
     });
 }
 

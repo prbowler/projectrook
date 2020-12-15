@@ -2,8 +2,6 @@ const playerModel = require("../models/playerModel.js");
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
-
-
 function addPlayer(req, res) { //INSERT INTO player (username, password) VALUES ($1, $2)
     console.log("addPlayer");
     let username = req.body.username;
@@ -11,31 +9,48 @@ function addPlayer(req, res) { //INSERT INTO player (username, password) VALUES 
     bcrypt.hash(password, saltRounds, function(err, hash) {
         let values = [username, hash];
         playerModel.addPlayer(values, function(error, result) {
-            if (!error && result) {
-                result = {success: true};
-                req.session.player = username;
-                res.render('pages/gameLounge', { title: 'Game Lounge' });
-                //res.json(result);
-            } else {
-                res.json(error);
-            }
+            res.json(result);
         });
     });
 }
 
-function getPlayer(req, res, callback) { //SELECT username, password FROM player WHERE username = $1
+function getPlayer(req, res) { //SELECT username, password FROM player WHERE username = $1
     let values = [res.session.player];
-    playerModel.getPlayer(values, function(error, results) {
-        callback(null, results);
+    playerModel.getPlayer(values, function(error, result) {
+        res.json(result);
     });
 }
 
 function getPlayers(req, res) { //SELECT username, password FROM player
-    playerModel.getPlayers(1, function(error, results) {
-        res.json(results);
+    playerModel.getPlayers(1, function(error, result) {
+        res.json(result);
     });
 }
 
+function getUser (req, res) {
+    let result = {player: req.session.player};
+    console.log("server result", result);
+    res.json(result);
+}
+
+function getUsers(req, res, callback) {
+    console.log("getUsers");
+    playerModel.getUsers(function(error, result) {
+        res.json(result);
+    });
+}
+
+
+
+module.exports = {
+    addPlayer: addPlayer,
+    getPlayer: getPlayer,
+    getPlayers: getPlayers,
+    getUser: getUser,
+    getUsers: getUsers
+};
+
+/*
 function validatePlayer(req, res) {
     console.log('validatePlayer');
     let username = req.body.username;
@@ -47,28 +62,18 @@ function validatePlayer(req, res) {
             res.json(error);
         } else {
             bcrypt.compare(password, results.rows[0].password, function (error, result) {
+                console.log("validateerror", error);
+                console.log("validateresult", result);
                 if (!error && result) {
                     req.session.player = username;
                     result = {success: true};
-                    //res.json(result);
-                    res.render('pages/gameLounge', { title: 'Game Lounge' });
+                    res.json(result);
                 } else {
                     res.json(error);
                 }
             });
         }
     });
-}
-
-function requireLogin(req, res, next) {
-    console.log("check for user");
-    if (req.session && req.session.player) {
-        console.log("user is logged in");
-        next();
-    } else {
-        console.log("user is not logged in", req.session);
-        res.render('pages/login', { title: 'Login' });
-    }
 }
 
 function logout(req, res) {
@@ -81,49 +86,14 @@ function logout(req, res) {
     res.render('pages/index', { title: 'Home' });
 }
 
-function getUser (req, res) {
-    let result = {player: req.session.player};
-    console.log("server result", result);
-    res.json(result);
+function requireLogin(req, res, next) {
+    console.log("check for user");
+    if (req.session && req.session.player) {
+        console.log("user is logged in");
+        next();
+    } else {
+        console.log("user is not logged in", req.session);
+        res.render('pages/login', { title: 'Login' });
+    }
 }
-
-/*function getUser(req, res, callback) {
-    console.log("getUser");
-    let values = [req.session.player];
-    playerModel.getUser(values, function(error, result) {
-        if (!error && result) {
-            res.json(result);
-        } else {
-            callback(error);
-        }
-    });
-}*/
-
-function getUsers(req, res, callback) {
-    console.log("getUsers");
-    playerModel.getUsers(function(error, results) {
-        console.log("server results: ", results);
-        callback(error, results);
-    });
-}
-
-function startPage(req, res) {
-    res.render('pages/index', { title: 'Home' });
-}
-
-function login(req, res) {
-    res.render('pages/login');
-}
-
-module.exports = {
-    addPlayer: addPlayer,
-    getPlayer: getPlayer,
-    getPlayers: getPlayers,
-    validatePlayer: validatePlayer,
-    requireLogin: requireLogin,
-    logout: logout,
-    getUser: getUser,
-    getUsers: getUsers,
-    startPage: startPage,
-    login: login
-};
+*/

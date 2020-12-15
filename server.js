@@ -5,7 +5,7 @@ const app = express();
 let session = require('express-session');
 let FileStore = require('session-file-store')(session);
 
-const mainRouter = require('./routes/main');
+//const mainRouter = require('./routes/main');
 const playerRouter = require('./routes/players');
 const cardRouter = require('./routes/cards');
 const gameRouter = require('./routes/games');
@@ -15,17 +15,16 @@ const roundRouter = require('./routes/rounds');
 const scoreRouter = require('./routes/scores');
 const teamRouter = require('./routes/teams');
 const trickRouter = require('./routes/tricks');
+const loginRouter = require('./routes/login');
 
 //logger middleware morgan
 app.use(require('morgan')('dev'));
 
 //session info
 app.use(session({
-    name: 'server-session-cookie-id',
     secret: 'rook is fun',
     saveUninitialized: true,
-    resave: true,
-    store: new FileStore()
+    resave: false
 }));
 
 //test of requests
@@ -49,10 +48,8 @@ app.use(express.urlencoded({extended: true}));
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
-
-
 //Set the routers
-app.use('/', mainRouter);
+app.use('/', loginRouter);
 app.use('/players', playerRouter);
 app.use('/cards', cardRouter);
 app.use('/games', gameRouter);
@@ -81,3 +78,4 @@ app.get('/sse-server', function (req, res) {
 
 //Listen on port
 app.listen(PORT, () => console.log(`Listening on ${ PORT }`));
+

@@ -14,7 +14,7 @@ function getTeam(values, callback) {
 
 function getGamesOfPlayer(values, callback) {
     console.log("getGamesOfPlayer-team-model");
-    const sql = "SELECT gamename FROM team WHERE ANY(players) = $1";
+    const sql = "SELECT gamename FROM team WHERE $1 = ANY(players)";
     db.selByValues(sql, values, callback);
 }
 
