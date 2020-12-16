@@ -3,7 +3,6 @@ const passButton = "<button id=\"pass\" onclick=\"pass()\">Pass</button>";
 
 function setupTable() {
     showHand();
-    showPlayedCards();
 }
 
 function showHand() {
@@ -46,11 +45,47 @@ function awardBid() {
                bidArray.push(r.split(": "));
             });
             console.log("bidArray", bidArray);
+            let bidPerson = [];
+            let bid = [];
+            for(let i = 0; i < bidArray.length; i++) {
+                bidPerson.push(bidArray[i][0]);
+                let b = bidArray[i][1];
+                if(b !== 'pass') {bid.push(Number(b));}
+            }
+            console.log("bidPerson", bidPerson);
+            console.log("bid", bid);
+            let bidAmount = Math.max(...bid);
+            let maxBidder = bidPerson[bid.indexOf(bidAmount)];
+            console.log("bidAmount", bidAmount);
+            console.log("maxBidder", maxBidder);
+            $.post("/hands/getWidow", function(widow, result) {
+                if(widow.success) {
+                    console.log("widow", widow.list[0].cards);
+                    let params = {
+                        cards: widow.list[0].cards,
+                        player: maxBidder
+                    };
+                    $.post("/hands/addWidow", params, function(data, result) {
+                        console.log("get widow data", data);
+                        let params = {
+                            cards: '{}',
+                            player: 'widow'
+                        };
+                        $.post("/hands/updateByPlayer", params, function(data, result) {
+                            console.log("update player data", data);
+                            location.reload();
+
+                            conductDiscard();
+                        });
+                    });
+                }
+            });
         }
     });
 }
 
 function playRound() {
+    showPlayedCards();
     playCards();
 }
 
@@ -143,8 +178,8 @@ function renderCard(card) {
 
 function showPlayedCards() {
     $.post("/hands/getTrick", function(data, result) {
-        console.log("showplayedcards", data.list[0].cards);
-        if(data.success && data.list[0].cards.length > 0) {
+        console.log("showplayedcards", data);
+        if(data.success && data.list.length > 0) {
             console.log("played", data.list[0].cards);
             let params = {ids: data.list[0].cards};
             console.log("params", params);

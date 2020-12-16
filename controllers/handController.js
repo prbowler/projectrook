@@ -60,10 +60,34 @@ function updateHand(req, res) { //UPDATE hand SET cards = $1 WHERE gameName = $2
     });
 }
 
+function updatePlayerHand(req, res) { //UPDATE hand SET cards = $1 WHERE gameName = $2 AND username = $3
+    console.log("updateHand");
+    let values = [req.body.cards, req.session.game, req.body.player];
+    handModel.updateHand(values, function(error, result) {
+        if(!error) {
+            res.json(result);
+        } else {
+            res.json(error);
+        }
+    });
+}
+
 function addToHand(req,res) { //UPDATE hand SET cards = array_append(cards, $1) WHERE gameName = $2 AND username = $3
     console.log("addToHand");
     let values = [req.body.card, req.session.game, req.session.player];
     handModel.addToHand(values, function(error, result) {
+        if(!error) {
+            res.json(result);
+        } else {
+            res.json(error);
+        }
+    });
+}
+
+function addWidow(req,res) { //UPDATE hand SET cards = array_append(cards, $1) WHERE gameName = $2 AND username = $3
+    console.log("addWidow");
+    let values = [req.body.cards, req.session.game, req.body.player];
+    handModel.addArrayToHand(values, function(error, result) {
         if(!error) {
             res.json(result);
         } else {
@@ -114,7 +138,9 @@ module.exports = {
     getHandWidow: getHandWidow,
     getHandTrick: getHandTrick,
     updateHand: updateHand,
+    updatePlayerHand: updatePlayerHand,
     addToHand: addToHand,
+    addWidow: addWidow,
     subtractFromHand: subtractFromHand,
     addToTrick: addToTrick,
     addToWidow: addToWidow

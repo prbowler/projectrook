@@ -25,6 +25,12 @@ function addToHand(values, callback) {
     db.add(sql, values, callback);
 }
 
+function addArrayToHand(values, callback) {
+    console.log("addToHand");
+    const sql = "UPDATE hand SET cards = array_cat(cards, $1) WHERE gameName = $2 AND username = $3";
+    db.add(sql, values, callback);
+}
+
 function subtractFromHand(values, callback) {
     console.log("subtract from hand");
     const sql = "UPDATE hand SET cards = array_remove(cards, $1) WHERE gameName = $2 AND username = $3";
@@ -36,6 +42,7 @@ module.exports = {
     getHand: getHand,
     updateHand: updateHand,
     addToHand: addToHand,
+    addArrayToHand: addArrayToHand,
     subtractFromHand: subtractFromHand
 };
 
