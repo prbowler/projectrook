@@ -23,3 +23,29 @@ input {
     margin-left:10px;
     color:green;
 }
+
+button {
+    padding:2px;
+    border-radius: 5px;
+    margin:20px;
+    font-size:16px;
+}
+
+input {
+    padding:5px;
+    font-size:16px;
+    border-radius: 10px;
+}
+
+select{
+    padding:5px;
+    margin:20px;
+    font-size:16px;
+    border-radius:10px;
+}
+
+label{
+    margin-left:20px;
+    color:black;
+}
+

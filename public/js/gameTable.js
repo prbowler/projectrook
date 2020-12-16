@@ -1,8 +1,10 @@
 const bidForm = "<input id='bidAmount' type=\"number\" name=\"bidAmount\" step=\"5\"><button id=\"bid\" onclick=\"bid()\">Bid</button>";
 const passButton = "<button id=\"pass\" onclick=\"pass()\">Pass</button>";
+let cards = [];
 
 function setupTable() {
     showHand();
+    //showPlayedCards();
 }
 
 function showHand() {
@@ -74,8 +76,7 @@ function awardBid() {
                         $.post("/hands/updateByPlayer", params, function(data, result) {
                             console.log("update player data", data);
                             location.reload();
-
-                            conductDiscard();
+                            //conductDiscard();
                         });
                     });
                 }
@@ -85,8 +86,8 @@ function awardBid() {
 }
 
 function playRound() {
-    showPlayedCards();
     playCards();
+    showPlayedCards();
 }
 
 function newTrick() {
@@ -139,7 +140,7 @@ function playCard(card) {
                                 console.log("error removing card", data);
                             } else {
                                 $(card).hide();
-                                location.reload();
+                                showPlayedCards();
                             }
                         });
                     }
@@ -188,130 +189,125 @@ function showPlayedCards() {
                     $("#status").text("error joining game");
                 } else {
                     console.log("played cards", cardData);
+                    $("#played_cards").empty();
                     cardData.list.forEach(function(r) {
                         $("#played_cards").append(renderCard(r));
                     });
                 }
             });
         }
-    })
+    });
 }
 /*
-
-function deal() {
-    $.post("/cards", function(result) {
-        let showHand = "<button id=\"show-hand\" onclick=\"showHand();\">Show Hand</button>";
-        console.log("game.js result", result);
-        $("#status").text("Hand Dealt");
-        $("#deal").hide();
-        $("#game-menu").append(showHand);
+function getCards() {
+    $.post("/cards", function(data, result) {
+        if(!result) {
+            $("#status").text("error getting cards game");
+        } else {
+            console.log("cards received");
+            dealNewHands(data);
+        }
     });
 }
 
 
-
-function showHandOld() {
-    $.post("/cards/showHand", function(result) {
-        console.log("game.js result showHand", result);
-        $("#show-hand").hide();
-        $("#game-menu").append(bid);
-        $("#game-menu").append(pass);
-        $("#game-menu").append(subcribeButton);
-        $("#game-menu").append(checkBid);
-        result.forEach(function(r) {
-            let renderedCard = renderCard(r);
-            $("#cards").append(renderedCard);
-        });
+function dealNewHands(data) {
+    cards = data.list;
+    $.post("/players")
+    let params1 = {cards: getID(cards, 0, 10), player: players[0]};
+    let params2 = {cards: getID(cards, 10, 20), player: players[1]};
+    let params3 = {cards: getID(cards, 20, 30), player: players[2]};
+    let params4 = {cards: getID(cards, 30, 40), player: players[3]};
+    let params5 = {cards: getID(cards, 40, 45), player: players[4]};
+    let params6 = {gameName: gameName, player: players[5], cards: []};
+    console.log("params ", params1);
+    $.post("/hands", params1, function(data, result) {
+        if(!result) {
+            $("#status").text("error dealing player1 cards");
+        } else {
+            $.post("/hands", params2, function(data, result) {
+                if(!result) {
+                    $("#status").text("error dealing player2 cards");
+                } else {
+                    $.post("/hands", params3, function(data, result) {
+                        if(!result) {
+                            $("#status").text("error dealing player3 cards");
+                        } else {
+                            $.post("/hands", params4, function(data, result) {
+                                if(!result) {
+                                    $("#status").text("error dealing player4 cards");
+                                } else {
+                                    $.post("/hands", params5, function(data, result) {
+                                        if(!result) {
+                                            $("#status").text("error dealing widow cards");
+                                        } else {
+                                            $.post("/hands", params6, function (data, result) {
+                                                if (!result) {
+                                                    $("#status").text("error dealing trick cards");
+                                                } else {
+                                                    console.log("hands dealt");
+                                                    setupTrick();
+                                                }
+                                            });
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                    });
+                }
+            });
+        }
     });
 }
 
-function pass() {
-
-    $("#bidAmount").hide();
-    $("#bid").hide();
-    $("#pass").hide();
-    $("#game-menu").append(newTrick);
-    $.post("/games/pass", function(result) {
-        console.log("game.js result", result);
-    });
-    $(".card").click(function() {
-        $(this).hide();
-        let suit = this.children[0].className.slice(11);
-        let params = {
-            number: this.children[0].innerHTML,
-            suit: suit
-        };
-        playCard(params);
+function setupTrick() {
+    let params = {gameName: gameName};
+    $.post("/tricks", params, function(data, result) {
+        if(!result) {
+            $("#status").text("error setting up trick");
+        } else {
+            console.log("trick setup");
+            setupBid();
+        }
     });
 }
 
-function bid() {
-    console.log("bid");
-    let bidAmount = $("#bidAmount").val();
-    console.log("bid amount ", bidAmount);
-    if (!bidAmount || bidAmount === 0) { pass(); }
-    let params = {bidAmount: bidAmount};
-    $.post("/games/bid", params, function(result) {
-        $("#status").text(JSON.stringify(result));
+function setupBid() {
+    let params = {gameName: gameName};
+    $.post("/bids", params, function(data, result) {
+        if(!result) {
+            $("#status").text("error setting up bid");
+        } else {
+            console.log("bid setup");
+            setupRound();
+        }
     });
 }
 
-function checkBid() {
-    console.log("checkbid");
-    $.post("/games/checkBid", function(result) {
-
-        $("#game-info").html(gameInfo);
-        $("#status").text(JSON.stringify(result));
+function setupRound() {
+    let params = {gameName: gameName};
+    $.post("/rounds", params, function(data, result) {
+        if(!result) {
+            $("#status").text("error setting up round");
+        } else {
+            console.log("round setup");
+            setupScore();
+        }
     });
 }
 
-function playCard(params) {
-    console.log("play card client", params);
-    $.post("/cards/playCard", params, function(result) {
-        $("#status").text(JSON.stringify(result));
-    });
-    showTrick({trickID: 1});
-}
-
-function showTrick(params) {
-    console.log("show trick cards");
-    $.post("/cards/showTrickCards", params, function(result) {
-        $("#status").text(JSON.stringify(result));
-        $("#played_cards").empty();
-        result.forEach(function(r) {
-            let renderedCard = renderCard(r);
-            $("#played_cards").append(renderedCard);
-        });
+function setupScore() {
+    let params = {gameName: gameName};
+    $.post("/scores", params, function(data, result) {
+        if(!result) {
+            $("#status").text("error setting up score");
+        } else {
+            console.log("score setup game ready to play");
+            joinGame();
+        }
     });
 }
 
-function newTrick() {
-    console.log("new trick");
-    let gameName = "test";
-    let round = 1;
-    let trickNumber = 2;
-    let params = {
-        gameName: gameName,
-        round: round,
-        trickNumber: trickNumber
-    };
-    $.post("/cards/newTrick", params, function(result) {
-        $("#bidAmount").show();
-        $("#bid").show();
-        $("#pass").show();
-    });
-}
 
-function renderCard(card) {
-    console.log("card ", card);
-    let suit = 'black';
-    let number = 'R';
-    if (card.suit === 1) { suit = "red";}
-    if (card.suit === 2) { suit = "yellow";}
-    if (card.suit === 4) { suit = "green";}
-    if (card.number !== 0) { number = card.number;}
-    let cardDiv = "<div class='card'><span class='top_number " + suit + "'>" + number +
-        "</span><div class='inner_card " + suit + "'><span class='middle_number " + suit + "'>" + number +
-        "</span></div><span class='bottom_number " + suit + "'>" + number + "</span></div>";
-    return cardDiv;
-}*/
+ */

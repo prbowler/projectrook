@@ -31,7 +31,14 @@ function getPlayer(req, res) { //SELECT username, password FROM player WHERE use
 }
 
 function getPlayers(req, res) { //SELECT username, password FROM player
-    playerModel.getPlayers(1, function(error, result) {
+    playerModel.getPlayers( function(error, result) {
+        res.json(result);
+    });
+}
+
+function getGamePlayers(req, res) { //SELECT username, password FROM player
+    let values = [req.session.game];
+    playerModel.getPlayers(values, function(error, result) {
         res.json(result);
     });
 }

@@ -19,18 +19,12 @@ let user = '';
 function setupBanner() {
     console.log("Banner Loaded");
     $.post("/players/user", function(data, result) {
-        console.log("bannerdata", data);
-        console.log("bannerresult",result);
         if(data.player || result.success) {
-            console.log("bannerdata2", data);
-            console.log("bannerresult2",result);
             $("#main-menu").append(homeLink);
             $("#main-menu").append(logoutLink);
             $("#main-menu").append(gamesLink);
             $("#main-menu").append('<li><a>'+ data.player +'</a></li>');
         } else {
-            console.log("bannerdata3", data);
-            console.log("bannerresult3",result);
             $("#main-menu").append(homeLink);
             $("#main-menu").append(loginLink);
             $("#main-menu").append(newPlayerLink);
@@ -55,7 +49,6 @@ function setupNewPlayer() {
 function login() {
     let username = $("#username").val();
     let password = $("#password").val();
-    console.log(username + " " + password);
 
     let params = {
         username: username,
@@ -63,8 +56,6 @@ function login() {
     };
 
     $.post("/validate", params, function(result) {
-        console.log("login validate result", result);
-        //console.log("login validate data", data);
         if (result && result.success) {
             console.log("Successfully logged in.");
             $("#login_form").empty();
@@ -82,7 +73,6 @@ function login() {
 function newPlayer() {
     let username = $("#username").val();
     let password = $("#password").val();
-    console.log(username + " " + password);
 
     let params = {
         username: username,
@@ -90,7 +80,6 @@ function newPlayer() {
     };
 
     $.post("/players/add", params, function(result) {
-        console.log("client-result", result);
         if (result && result.success) {
             $("#status").text("Successfully added player.");
             $("#login_form").empty();

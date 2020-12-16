@@ -31,16 +31,12 @@ function setup() {
 
 function getUser() {
     $.post("/players/user", function(data, results) {
-        console.log("data", data);
-        console.log("results", results);
         getGames(data);
     });
 }
 
 function getGames(params) {
     $.post("/teams/getGames", params, function(data, result) {
-        console.log("data2", data);
-        console.log("result2", result);
         if(data && data.list.length) {
             console.log("show games", data.list);
             showGameList(data.list);
@@ -63,8 +59,6 @@ function createGame() {
     gameName = $("#gameName").val();
     let params = {gameName: gameName};
     $.post("/games/add", params, function(data, results) {
-        console.log("clientdata", data);
-        console.log("clientresult", results);
         if(!results) {
             $("#game_form").hide();
             $("#status").text("error creating game");
@@ -73,13 +67,10 @@ function createGame() {
                 if(!result) {
                     $("#status").text("error getting users");
                 } else {
-                    console.log("clientresult", result);
-                    console.log("clientdata", data);
                     users = [];
                     for (const d of data.list) {
                         users.push(d.username);
                     }
-                    console.log("users ", users);
                     $("#game_form").hide();
                     $("#new_game").append(gamePlayers);
                     setupPlayerChoices();
@@ -116,8 +107,6 @@ function setupGame() {
             $("#status").text("error getting cards game");
         } else {
             console.log("cards received");
-            console.log("clientresult", result);
-            console.log("clientdata", data);
             dealHands(data);
         }
     });
@@ -228,7 +217,6 @@ function joinGame() {
             $("#status").text("error joining game");
         } else {
             console.log("game joined");
-            //$("#status").append('<a ');
             location.reload();
         }
     });
@@ -245,7 +233,7 @@ function getID(result, start, stop) {
 
 function setupPlayerChoices() {
     for(const user of users) {
-        if (user !== 'widow'){
+        if (user !== 'widow' && user !== 'trick'){
             $("#player1").append($('<option>' + user + '</option>').val(user));
             $("#player2").append($('<option>' + user + '</option>').val(user));
             $("#player3").append($('<option>' + user + '</option>').val(user));
