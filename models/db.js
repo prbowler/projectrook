@@ -1,5 +1,5 @@
 const { Pool } = require('pg');
-const connectionString = process.env.DATABASE_URL || "postgres://rookplayer:rookplayer@localhost:5432/rook";
+const connectionString = process.env.DATABASE_URL || "postgres://qridjelclbpsgz:e41fb5d09b2b16fd04e141399d01167b64dc7866f3402129cad23dbc19fa0eee@ec2-52-5-176-53.compute-1.amazonaws.com:5432/d1q7qo1brheiss"; //postgres://rookplayer:rookplayer@localhost:5432/rook
 const pool = new Pool({connectionString: connectionString});
 
 function sel(sql, callback) {
